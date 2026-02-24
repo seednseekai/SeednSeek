@@ -1,0 +1,1591 @@
+/* ============================================
+   SeednSeek - Main Stylesheet
+   Modern, clean design matching logo style
+   ============================================ */
+
+/* CSS Variables - Green theme matching logo */
+:root {
+    --primary-green: #2d8659;
+    --primary-green-light: #3da372;
+    --primary-green-dark: #1f5d3f;
+    --accent-green: #4ade80;
+    --text-dark: #1a1a1a;
+    --text-light: #666666;
+    --bg-white: #ffffff;
+    --bg-light: #f8f9fa;
+    --bg-gradient: linear-gradient(135deg, #2d8659 0%, #3da372 100%);
+    --shadow-sm: 0 2px 8px rgba(45, 134, 89, 0.1);
+    --shadow-md: 0 4px 16px rgba(45, 134, 89, 0.15);
+    --shadow-lg: 0 8px 32px rgba(45, 134, 89, 0.2);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-white);
+    overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+p {
+    margin-bottom: 1rem;
+    color: var(--text-light);
+}
+
+a {
+    color: var(--primary-green);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--primary-green-light);
+}
+
+/* Header Styles */
+.site-header {
+    position: sticky;
+    top: 0;
+    background: var(--bg-white);
+    box-shadow: var(--shadow-sm);
+    z-index: 1000;
+    padding: 1rem 0;
+    transition: var(--transition);
+}
+
+/* Homepage fixed header (always fixed, not sticky) */
+body.homepage .site-header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+body.homepage .site-header:not(.is-solid) .logo-image {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    min-height: 40px !important;
+    min-width: 40px !important;
+    width: auto !important;
+    height: 50px !important;
+    max-width: 200px !important;
+    background: transparent !important;
+    object-fit: contain !important;
+}
+
+body.homepage .site-header:not(.is-solid) .primary-nav a {
+    color: white;
+}
+
+body.homepage .site-header:not(.is-solid) .menu-toggle span {
+    background: white;
+}
+
+body.homepage .site-header.is-solid {
+    background: var(--bg-white);
+    box-shadow: var(--shadow-sm);
+}
+
+body.homepage .site-header.is-solid .logo-image {
+    filter: none;
+}
+
+body.homepage .site-header.is-solid .primary-nav a {
+    color: var(--primary-green);
+}
+
+body.homepage .site-header.is-solid .menu-toggle span {
+    background: var(--text-dark);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+    position: relative;
+    z-index: 10;
+}
+
+.logo-group:hover {
+    opacity: 0.8;
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    min-width: 40px;
+    object-fit: contain;
+    display: block;
+    background: transparent;
+}
+
+.primary-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.primary-nav a {
+    color: var(--text-dark);
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: var(--transition);
+}
+
+.primary-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-green);
+    transition: var(--transition);
+}
+
+.primary-nav a:hover::after,
+.primary-nav a[data-nav].active::after {
+    width: 100%;
+}
+
+.primary-nav a:hover {
+    color: var(--primary-green);
+}
+
+/* 語言切換拉桿（選單列最右側） */
+.lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-light);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 999px;
+    padding: 2px;
+    margin-left: 1rem;
+    flex-shrink: 0;
+    pointer-events: auto;
+    position: relative;
+    z-index: 1002;
+    cursor: pointer;
+}
+.lang-toggle-btn {
+    padding: 0.35rem 0.75rem;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: var(--transition);
+}
+.lang-toggle-btn:hover {
+    color: var(--text-dark);
+}
+.lang-toggle-btn.active {
+    background: var(--primary-green);
+    color: white;
+}
+body.homepage .site-header:not(.is-solid) .lang-toggle {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.3);
+}
+body.homepage .site-header:not(.is-solid) .lang-toggle-btn {
+    color: rgba(255,255,255,0.85);
+}
+body.homepage .site-header:not(.is-solid) .lang-toggle-btn:hover {
+    color: white;
+}
+body.homepage .site-header:not(.is-solid) .lang-toggle-btn.active {
+    background: white;
+    color: var(--primary-green);
+}
+
+/* 依 body 語言顯示對應內文 */
+body.lang-en [data-lang-zh] { display: none !important; }
+body.lang-en [data-lang-en] { display: inline !important; }
+body.lang-en [data-lang-en].block { display: block !important; }
+body.lang-zh [data-lang-en] { display: none !important; }
+body.lang-zh [data-lang-zh] { display: inline !important; }
+body.lang-zh [data-lang-zh].block { display: block !important; }
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+    position: relative;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-dark);
+    transition: var(--transition);
+    border-radius: 2px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* 當 menu 打開時，toggle 按鈕的顏色保持深色以便在白色背景上可見 */
+.menu-toggle.active span {
+    background: var(--text-dark) !important;
+}
+
+/* 背景覆蓋層 - 半透明模糊 */
+.menu-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-backdrop.active {
+    display: block;
+    opacity: 1;
+}
+
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    padding-top: 80px;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+.mobile-nav.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.mobile-nav a {
+    display: block;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.mobile-nav a:first-child {
+    padding-top: 0;
+}
+
+.mobile-nav a:last-child {
+    border-bottom: none;
+}
+
+.mobile-nav a:hover {
+    color: var(--primary-green);
+    padding-left: 1rem;
+}
+
+/* Page Shell */
+.page-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Hero Section - Homepage full background */
+.hero-home {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://static.igem.wiki/teams/5928/gif/trajectory1.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    padding: 0 2rem;
+}
+
+.hero-home::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.4) 100%);
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
+}
+
+.hero-home .hero-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 6rem 2rem;
+}
+
+.hero-home .hero-tag {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-home .hero-title {
+    color: white;
+    -webkit-text-fill-color: white;
+    background: none;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+.hero-home .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 1rem;
+}
+
+.hero-home .hero-description {
+    color: rgba(255,255,255,0.95);
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    line-height: 1.8;
+}
+
+.hero-home .hero-cta {
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.hero-home .btn--secondary {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.hero-home .btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Hero Section - inner pages */
+.hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    overflow: hidden;
+    padding: 4rem 2rem;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(30px, -30px) rotate(180deg);
+    }
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-left {
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--bg-gradient);
+    color: white;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-green-dark) 0%, var(--primary-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    line-height: 1.8;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn--primary {
+    background: var(--bg-gradient);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: white;
+}
+
+.btn--secondary {
+    background: transparent;
+    color: var(--primary-green);
+    border: 2px solid var(--primary-green);
+}
+
+.btn--secondary:hover {
+    background: var(--primary-green);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.hero-right {
+    position: relative;
+    animation: fadeInRight 1s ease-out;
+}
+
+.hero-visual {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.protein-visual {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.dna-helix {
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    animation: rotate 20s linear infinite;
+}
+
+.dna-helix:nth-child(2) {
+    animation-duration: 25s;
+    animation-direction: reverse;
+    opacity: 0.7;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   Scrollytelling Section Styles
+   ============================================ */
+
+/* ============================================
+   Scrollytelling Section Styles
+   ============================================ */
+
+/* 1. 外層軌道：創造足夠長的滾動距離 (4倍螢幕高) */
+.scrolly-container {
+    position: relative;
+    height: 400vh; 
+    width: 100%;
+    background: var(--bg-white);
+    z-index: 1; /* 降低 z-index，讓內容在上層 */
+    pointer-events: none; /* 讓滑鼠事件穿透 */
+}
+
+.scrolly-container > * {
+    pointer-events: auto; /* 但子元素可以接收事件 */
+}
+
+/* 2. 視窗層：利用 sticky 自動黏在頂部，不需要 JS 控制 */
+.sticky-view {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: visible; /* sticky 容器不要裁切，避免 iOS 失效 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    pointer-events: auto; /* 允許箭頭/控制項可點擊（子元素再各自控管） */
+}
+
+/* --- 內部元件樣式 --- */
+
+/* Slogan 文字區塊 */
+.protein-slogan-wrapper {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 20;
+}
+
+.protein-slogan-left, .protein-slogan-right {
+    text-align: center;
+}
+.slogan-text {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: var(--primary-green-dark);
+}
+
+/* 3D Viewer 容器 */
+.protein-viewer-wrapper {
+    position: absolute;
+    /* 不要用 !important，否則 JS 動態調整 top 會完全失效（你說平板往上移沒變就是這個原因） */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none; /* 讓滑鼠滾輪直接穿透，不會卡在圖片上 */
+    z-index: 100 !important; /* 大幅提高 z-index 確保在所有元素之上 */
+    visibility: visible !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* 個別蛋白質畫布 */
+.protein-viewer-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 預設居中 */
+    width: 400px;
+    height: 400px;
+    overflow: hidden; /* 把 WebGL/canvas 溢出限制在盒內，避免重整時撐寬整頁 */
+    opacity: 0.5; /* 拿掉 !important，這樣 JS 才能控制它變清楚 */
+    transition: opacity 0.1s linear; /* 讓變化更即時 */
+    visibility: visible !important;
+    display: block !important;
+    z-index: 101 !important; /* 確保在 wrapper 之上 */
+    background: transparent !important; /* 去背：背景透明 */
+}
+
+/* NGL Stage 修正 */
+.ngl-stage {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    background: transparent !important; /* 去背：背景透明 */
+    overflow: hidden !important; /* 防止 canvas 初始尺寸異常撐寬頁面 */
+    z-index: 102 !important; /* 確保在 item 之上 */
+}
+
+/* 手機/平板模式：輪播箭頭 */
+.protein-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    height: auto;
+    background: none; /* 移除背景 */
+    border: none; /* 移除邊框 */
+    border-radius: 0; /* 移除圓形 */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* 大幅提高 z-index 確保在最上層 */
+    opacity: 0;
+    pointer-events: auto; /* 確保可以點擊 */
+    transition: opacity 0.3s ease;
+    color: var(--primary-green); /* 綠色 */
+    padding: 15px;
+    touch-action: manipulation; /* 改善觸控響應 */
+}
+
+.protein-carousel-arrow svg {
+    stroke-width: 3; /* 加粗三角形 */
+    width: 32px;
+    height: 32px;
+    stroke: var(--primary-green); /* 確保是綠色 */
+    fill: none;
+}
+
+.protein-carousel-arrow:hover {
+    opacity: 0.8; /* 懸停時稍微不透明 */
+}
+
+.protein-carousel-arrow:active {
+    opacity: 1; /* 點擊時完全不透明 */
+}
+
+.protein-carousel-prev {
+    left: 10px;
+}
+
+.protein-carousel-next {
+    right: 10px;
+}
+
+/* 桌面模式：隱藏箭頭 */
+@media (min-width: 768px) {
+    .protein-carousel-arrow {
+        display: none !important;
+    }
+}
+
+/* 手機/平板幻燈片模式：不要箭頭 */
+.slideshow-mode .protein-carousel-arrow {
+    display: none !important;
+}
+
+/* 手機/平板幻燈片模式：文字固定在同一個位置，不要因內容高度不同而上下跳 */
+.slideshow-mode .protein-labels-wrapper {
+    display: block !important; /* 覆蓋原本的 grid，改成疊放 */
+}
+
+.slideshow-mode .protein-labels-wrapper .protein-label-item {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+}
+
+/* 確保 Canvas 可見 */
+.ngl-stage canvas {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    z-index: 999 !important; /* 確保在最上層 */
+    pointer-events: none !important; /* 讓滑鼠事件穿透 */
+}
+
+/* 下方描述文字區塊 */
+.protein-labels-wrapper {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    width: 80%;
+    max-width: 1200px;
+    display: grid !important; /* 強制顯示 */
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 30 !important;
+    visibility: visible !important;
+}
+
+.protein-label-item {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.protein-label-item h3 {
+    color: var(--primary-green);
+    margin-bottom: 0.5rem;
+}
+
+/* 手機版調整 */
+@media (max-width: 768px) {
+    .scrolly-container { height: 300vh; }
+    /* 手機/小平板：縮小蛋白畫布，左右留白會明顯變寬 */
+    .protein-viewer-item { width: 240px; height: 240px; }
+    .protein-labels-wrapper { grid-template-columns: 1fr; bottom: 5%; }
+    .protein-slogan-wrapper { flex-direction: column; gap: 20rem; opacity: 0.5; }
+}
+
+/* Section Styles */
+.section {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-section {
+    padding: 6rem 2rem;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-title h2 {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--bg-gradient);
+    border-radius: 2px;
+}
+
+/* Product Features - Clean list style for homepage */
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.feature-item {
+    padding: 0;
+}
+
+.feature-item h3 {
+    color: var(--primary-green-dark);
+    font-size: clamp(1.5rem, 3vw, 1.75rem);
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.feature-item h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: var(--bg-gradient);
+    border-radius: 2px;
+}
+
+.feature-item p {
+    color: var(--text-light);
+    line-height: 1.8;
+    font-size: 1.125rem;
+}
+
+/* Workflow Steps */
+.workflow-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-top: 4rem;
+}
+
+.workflow-step {
+    text-align: center;
+    padding: 0;
+}
+
+.step-number {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: 1rem;
+    font-family: 'Arial', sans-serif;
+}
+
+.workflow-step h3 {
+    color: var(--primary-green-dark);
+    font-size: clamp(1.5rem, 3vw, 1.75rem);
+    margin-bottom: 1rem;
+}
+
+.workflow-step p {
+    color: var(--text-light);
+    line-height: 1.8;
+    font-size: 1.125rem;
+}
+
+/* Legacy feature-card styles for other pages */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    transition: var(--transition);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--bg-gradient);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.feature-card h3 {
+    color: var(--primary-green-dark);
+    margin-bottom: 1rem;
+}
+
+/* Promotion Section */
+.promotion {
+    background: var(--bg-gradient);
+    color: white;
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.promotion::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 15s ease-in-out infinite;
+}
+
+.promotion-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.promotion h2 {
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.promotion p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+/* About Section */
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+
+.about-text h3 {
+    color: var(--primary-green-dark);
+    margin-bottom: 1.5rem;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.team-member {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.team-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--bg-gradient);
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+}
+
+/* Contact Section */
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+}
+
+.contact-info h3 {
+    color: var(--primary-green-dark);
+    margin-bottom: 1.5rem;
+}
+
+.contact-item {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+    position: relative;
+}
+
+.contact-item::before {
+    content: '📍';
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.contact-form {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(45, 134, 89, 0.1);
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Collaboration Section */
+.collab-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.collab-step {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    align-items: flex-start;
+}
+
+.collab-step-number {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    background: var(--bg-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.collab-step-content h3 {
+    color: var(--primary-green-dark);
+    margin-bottom: 1rem;
+}
+
+/* 與頂尖機構合作：左右兩欄（產業合作 | 學術交流） */
+.collab-partners-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 2rem auto 0;
+    align-items: start;
+}
+
+.collab-partners-col {
+    padding: 1.5rem;
+    background: transparent;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.collab-partners-heading {
+    color: var(--primary-green-dark);
+    font-size: 1.35rem;
+    margin-bottom: 1.5rem;
+}
+
+.collab-partners-logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.collab-partners-logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    padding: 0.5rem;
+    /* 透明 PNG 用白底，才不會出現灰白棋盤格 */
+    background: #fff;
+}
+
+.collab-partners-logo-item img {
+    max-width: 100%;
+    max-height: 100px;
+    object-fit: contain;
+    /* 避免透明圖在部分瀏覽器被當成有底色 */
+    background: #fff;
+}
+
+/* 透明 logo（如 uchicago）：強制白底，透明處顯示為白 */
+.collab-logo-no-bg {
+    background: #fff !important;
+}
+.collab-logo-no-bg .logo-img-transparent {
+    background: #fff !important;
+}
+
+@media (max-width: 768px) {
+    .collab-partners-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Privacy Section */
+.privacy-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.privacy-content h2 {
+    color: var(--primary-green-dark);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-content h3 {
+    color: var(--primary-green);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.privacy-content ul {
+    margin-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.privacy-content li {
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
+/* Footer Styles */
+.site-footer {
+    background: var(--text-dark);
+    color: white;
+    padding: 3rem 2rem 1.5rem;
+    margin-top: 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.footer-brand .logo-image {
+    height: 40px;
+    margin-bottom: 1rem;
+    filter: brightness(0) invert(1);
+}
+
+.footer-brand h3 {
+    color: white;
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+}
+
+.footer-tagline {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-tagline-zh {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+}
+
+.footer-links-section h4,
+.footer-contact h4 {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.footer-links-section ul {
+    list-style: none;
+}
+
+.footer-links-section li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links-section a {
+    color: rgba(255, 255, 255, 0.7);
+    transition: var(--transition);
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+}
+
+.footer-links-section a:hover {
+    color: var(--accent-green);
+}
+
+.footer-contact p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.footer-contact a {
+    color: rgba(255, 255, 255, 0.7);
+    transition: var(--transition);
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+}
+
+.footer-contact a:hover {
+    color: var(--accent-green);
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-bottom span {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-legal a {
+    color: rgba(255, 255, 255, 0.7);
+    transition: var(--transition);
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+}
+
+.footer-legal a:hover {
+    color: var(--accent-green);
+}
+
+/* Responsive Design */
+/* 響應式設計 - 平板和手機 */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    .primary-nav {
+        display: none !important;
+    }
+
+    .mobile-nav {
+        display: block;
+    }
+    
+    .menu-backdrop {
+        display: block;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-left {
+        order: 2;
+    }
+
+    .hero-right {
+        order: 1;
+    }
+
+    .hero-visual {
+        height: 300px;
+    }
+
+    .about-content,
+    .contact-content {
+        grid-template-columns: 1fr;
+    }
+
+    .collab-step {
+        flex-direction: column;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* Protein Visualization Responsive */
+    .protein-visualization-section {
+        padding: 4rem 1.5rem;
+        min-height: auto;
+    }
+
+    .protein-slogan-wrapper {
+        position: relative;
+        transform: none;
+        top: auto;
+        padding: 2rem 0;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .protein-slogan-left,
+    .protein-slogan-right {
+        text-align: center !important;
+    }
+
+    .protein-viewer-wrapper {
+        height: 400px;
+        margin: 2rem 0;
+    }
+
+    .protein-viewer-item {
+        width: 300px;
+        height: 300px;
+    }
+
+    .protein-labels-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .protein-label-item h3 {
+        font-size: 1.25rem;
+    }
+
+    .protein-label-item p {
+        font-size: 0.9rem;
+    }
+
+    .visualization-description {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .visualization-description p {
+        font-size: 1rem;
+    }
+
+    /* 手機/小平板：左右邊距再寬一點（你說目前太窄） */
+    .header-container {
+        padding: 0 1.75rem;
+    }
+
+    /* Scrolly 這段的文字卡片：縮窄一點，左右留更寬 */
+    .protein-labels-wrapper {
+        width: 76%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-container {
+        padding: 0 2rem;
+    }
+
+    /* 手機：整站內容左右留白加大（你說全頁 sections 都太貼邊） */
+    .section,
+    .content-section {
+        padding: 3rem 2rem;
+    }
+
+    .hero {
+        padding: 2rem 2rem;
+        min-height: 80vh;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .features-grid,
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Protein Visualization Mobile */
+    .protein-visualization-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .protein-slogan-wrapper {
+        padding: 1.5rem 0;
+    }
+
+    .slogan-text {
+        font-size: 1.75rem;
+    }
+
+    .company-name {
+        font-size: 1rem;
+    }
+
+    .company-tagline {
+        font-size: 0.85rem;
+    }
+
+    .protein-viewer-wrapper {
+        height: 350px;
+    }
+
+    .protein-viewer-item {
+        width: 220px;
+        height: 220px;
+    }
+
+    /* 讓下方文字卡片左右留白更寬（更明顯） */
+    .protein-labels-wrapper {
+        width: 72%;
+        max-width: 420px;
+    }
+
+    .protein-label-item p {
+        font-size: 0.85rem;
+    }
+}

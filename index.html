@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeednSeek 蛋白質設計優化平台</title>
+    <meta name="description" content="SeednSeek 提供專業的蛋白質設計優化服務，根據客戶需求定向生成優化的蛋白質序列，推動生物科技創新。">
+    <meta name="keywords" content="蛋白質設計,蛋白質優化,生物科技,蛋白質工程,SeednSeek">
+    <link rel="icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="apple-touch-icon" href="logo/sns_short_logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="components/load-components.js" defer></script>
+    <!-- NGL Viewer for 3D protein visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngl/2.0.0-dev.37/ngl.js"></script>
+    
+    <style>
+        /* 強制覆蓋，確保畫布絕對可見 */
+        .scrolly-container {
+            z-index: 10 !important; /* 比 Hero 高 */
+            background: white;      /* 避免透明造成重疊 */
+        }
+        .protein-viewer-wrapper {
+            z-index: 100 !important;
+            pointer-events: none; /* 讓 wrapper 不擋路 */
+        }
+        .protein-viewer-item {
+            z-index: 101 !important;
+            opacity: 0.5; /* 初始半透明，但允許 JS 控制（移除 !important） */
+            transition: opacity 0.1s linear; /* 讓變化更即時 */
+            pointer-events: none; /* 確保 wrapper 內的子元素（除了按鈕）不擋路，但可見 */
+        }
+        
+        /* 確保按鈕在最上層且可點擊 */
+        .protein-carousel-arrow {
+            z-index: 9999 !important; /* 超級高，確保贏過 canvas */
+            pointer-events: auto !important; /* 強制接收點擊 */
+            touch-action: manipulation; /* 優化觸控反應 */
+            cursor: pointer;
+            /* 增加點擊範圍，避免手指太粗點不到 */
+            padding: 20px; 
+            margin: -10px; 
+            background: rgba(255, 255, 255, 0.3); /* 暫時加個半透明背景測試位置，確認後可移除 */
+            border-radius: 50%;
+        }
+        /* 讓 NGL Stage 能夠接收滑鼠事件(如果需要旋轉)，或者設為 none */
+        .ngl-stage {
+            pointer-events: auto !important;
+            background: transparent !important; /* 去背：背景透明 */
+        }
+        
+        /* 確保 canvas 背景也是透明的 */
+        .ngl-stage canvas {
+            background: transparent !important;
+        }
+    </style>
+</head>
+<body class="homepage">
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="header-container">
+                <a class="logo-group" href="index.html" aria-label="SeednSeek 首頁">
+                    <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                </a>
+                <nav class="primary-nav" aria-label="主選單">
+                    <ul>
+                        <li><a href="index.html" data-nav="home"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html" data-nav="about"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="collab-methods.html" data-nav="collab"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html" data-nav="contact"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </nav>
+                <div class="lang-toggle" role="group" aria-label="Language">
+                    <button type="button" class="lang-toggle-btn" data-lang="zh" aria-pressed="true">中文</button>
+                    <button type="button" class="lang-toggle-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a>
+                <a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a>
+                <a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a>
+                <a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero-home" id="homepage-hero">
+                <div class="hero-overlay"></div>
+                <div class="hero-container">
+                    <div class="hero-tag">SeednSeek · Protein Design & Optimization</div>
+                    <h1 class="hero-title">SeednSeek</h1>
+                    <p class="hero-description">
+                        <span data-lang-zh>提交您的原型序列與優化目標，我們的專有生成式 AI 引擎將在數天內交付優化序列。從數月的濕實驗迭代，縮短至數天的計算設計，大幅加速您的藥物研發流程。</span>
+                        <span data-lang-en>Submit your prototype sequence and optimization goals; our proprietary generative AI engine delivers optimized sequences within days. From months of wet-lab iteration to days of computational design—dramatically accelerating your drug discovery pipeline.</span>
+                    </p>
+                    <div class="hero-cta">
+                        <a href="contact.html" class="btn btn--primary"><span data-lang-zh>開始優化</span><span data-lang-en>Start Optimization</span></a>
+                        <a href="about.html" class="btn btn--secondary"><span data-lang-zh>了解更多</span><span data-lang-en>Learn More</span></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Protein 3D Visualization Section - Scrollytelling -->
+            <section class="scrolly-container" id="scrolly-section">
+                <div class="sticky-view">
+                    
+                    <div class="protein-slogan-wrapper" id="slogan-wrapper">
+                        <div class="protein-slogan-left">
+                            <h2 class="slogan-text"><span data-lang-zh>加速演化</span><span data-lang-en>Accelerate<br>Evolution</span></h2>
+                            <p class="company-name">SeednSeek</p>
+                        </div>
+                        <div class="protein-slogan-right">
+                            <h2 class="slogan-text"><span data-lang-zh>精準優化</span><span data-lang-en>Precision<br>Optimization</span></h2>
+                            <p class="company-tagline">AI Protein Design</p>
+                        </div>
+                    </div>
+
+                    <div class="protein-viewer-wrapper" id="protein-wrapper">
+                        <div class="protein-viewer-item" id="item-structure">
+                            <div id="stage-structure" class="ngl-stage"></div>
+                        </div>
+                        <div class="protein-viewer-item" id="item-fluorescence">
+                            <div id="stage-fluorescence" class="ngl-stage"></div>
+                        </div>
+                        <div class="protein-viewer-item" id="item-sequence">
+                            <div id="stage-heatmap" class="ngl-stage"></div>
+                        </div>
+                    </div>
+
+                    <!-- 手機/平板模式：輪播箭頭（放在 wrapper 外，避免被 pointer-events: none 影響點擊） -->
+                    <button class="protein-carousel-arrow protein-carousel-prev" id="carousel-prev" aria-label="上一張">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="protein-carousel-arrow protein-carousel-next" id="carousel-next" aria-label="下一張">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+
+                    <div class="protein-labels-wrapper" id="labels-wrapper">
+                        <div class="protein-label-item">
+                            <h3><span data-lang-zh>結構 Structure</span><span data-lang-en>Structure</span></h3>
+                            <p><span data-lang-zh>透過三、四級結構分析，深入理解蛋白質的空間構型與摺疊模式。</span><span data-lang-en>Understand spatial conformation and folding through tertiary and quaternary structure analysis.</span></p>
+                        </div>
+                        <div class="protein-label-item">
+                            <h3><span data-lang-zh>功能 Function</span><span data-lang-en>Function</span></h3>
+                            <p><span data-lang-zh>模擬蛋白質的功能特性，預測其在特定環境下的行為。</span><span data-lang-en>Simulate functional properties and predict behavior under specific conditions.</span></p>
+                        </div>
+                        <div class="protein-label-item">
+                            <h3><span data-lang-zh>序列 Sequence</span><span data-lang-en>Sequence</span></h3>
+                            <p><span data-lang-zh>基於序列順序的映射，揭示胺基酸排列對結構與功能的影響。</span><span data-lang-en>Reveal how amino acid order affects structure and function through sequence mapping.</span></p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Key Benefits Section -->
+            <section class="section content-section">
+                <div class="section-title">
+                    <h2><span data-lang-zh>為什麼選擇計算優化</span><span data-lang-en>Why Computational Optimization</span></h2>
+                    <p><span data-lang-zh>數據驅動的精準設計，大幅縮短研發時程</span><span data-lang-en>Data-driven precision design that shortens R&D timelines</span></p>
+                </div>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <h3><span data-lang-zh>速度：天數而非月數</span><span data-lang-en>Speed: Days, Not Months</span></h3>
+                        <p><span data-lang-zh>虛擬篩選在數天內交付優化候選序列，而非傳統濕實驗室的數月迭代循環。從原型序列到優化候選物，加速您的研發流程，更快進入驗證階段。</span><span data-lang-en>Virtual screening delivers optimized candidates in days instead of months of wet-lab iteration. From prototype to optimized candidates, accelerate into validation faster.</span></p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><span data-lang-zh>精準：數據驅動預測</span><span data-lang-en>Precision: Data-Driven Prediction</span></h3>
+                        <p><span data-lang-zh>基於物理的分子動力學模擬結合高維度神經計算模型，確保可靠的預測。我們的混合方法同時最大化結構穩定性與功能性表現，提供按預測效能指標排序的候選序列。</span><span data-lang-en>Physics-based MD and high-dimensional neural models ensure reliable predictions. Our hybrid approach maximizes stability and function, delivering candidates ranked by predicted performance.</span></p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><span data-lang-zh>安全：您的智慧財產權受保護</span><span data-lang-en>Security: Your IP Protected</span></h3>
+                        <p><span data-lang-zh>客戶保留對輸入與輸出序列的 100% 所有權。我們採用企業級加密與保密協議（NDA），確保您的序列資料不會被分享或用於訓練公開模型。所有提交資料均經過加密處理。</span><span data-lang-en>You retain 100% ownership of input and output sequences. Enterprise encryption and NDAs ensure your data is never shared or used to train public models.</span></p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><span data-lang-zh>客製化：處理複雜約束條件</span><span data-lang-en>Custom: Complex Constraints</span></h3>
+                        <p><span data-lang-zh>針對您的特定限制條件進行客製化優化：目標結合親和力、熱穩定性、表現產量或治療特性。我們處理現成軟體無法應對的複雜、非標準約束條件。</span><span data-lang-en>Custom optimization for your constraints: affinity, thermostability, expression, or therapeutic profiles. We handle complex, non-standard cases off-the-shelf tools cannot.</span></p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><span data-lang-zh>專業：跨領域專家團隊</span><span data-lang-en>Expertise: Cross-Disciplinary Team</span></h3>
+                        <p><span data-lang-zh>我們的團隊匯聚醫學科學與神經計算領域的專家研究員，專注解決「結構-功能」難題。結合計算生物學、結構生物學與蛋白質工程的深度專業知識。</span><span data-lang-en>Our team combines medical science and neural computation to solve structure–function challenges, with deep expertise in computational biology, structural biology, and protein engineering.</span></p>
+                    </div>
+                    <div class="feature-item">
+                        <h3><span data-lang-zh>效率：計算優先方法</span><span data-lang-en>Efficiency: Compute-First</span></h3>
+                        <p><span data-lang-zh>採用「計算優先」策略，大幅減少濕實驗浪費。先透過計算篩選最優候選序列，再進行實驗驗證，提高成功率並降低成本。</span><span data-lang-en>Compute-first strategy reduces wet-lab waste. Screen candidates in silico, then validate in the lab—higher success rates and lower cost.</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="section content-section" style="background: var(--bg-light);">
+                <div class="section-title">
+                    <h2><span data-lang-zh>運作流程</span><span data-lang-en>How It Works</span></h2>
+                    <p><span data-lang-zh>從原型序列到優化候選物的精簡三步流程</span><span data-lang-en>From prototype sequence to optimized candidates in three steps</span></p>
+                </div>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-number">01</div>
+                        <h3><span data-lang-zh>提交約束條件</span><span data-lang-en>Submit Constraints</span></h3>
+                        <p><span data-lang-zh>提交您的目標序列與優化目標（例如：提高穩定性、改善溶解度、特定結合親和力）。我們的計算生物學研究人員分析您的規格，定義優化參數（pH、溫度、結合目標等）。</span><span data-lang-en>Submit your target sequence and goals (e.g. stability, solubility, binding affinity). Our team defines optimization parameters (pH, temperature, binding targets) from your specs.</span></p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">02</div>
+                        <h3><span data-lang-zh>AI 驅動優化</span><span data-lang-en>AI-Driven Optimization</span></h3>
+                        <p><span data-lang-zh>我們的專有生成式 AI 引擎與體外演化平台生成數千種變體序列，並透過高維度神經計算與分子動力學模擬進行篩選與驗證。迭代精煉確保品質與穩定性。</span><span data-lang-en>Our generative AI and in vitro evolution platform generate thousands of variants, screened and validated by neural computation and MD. Iterative refinement ensures quality and stability.</span></p>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-number">03</div>
+                        <h3><span data-lang-zh>接收優化序列</span><span data-lang-en>Receive Optimized Sequences</span></h3>
+                        <p><span data-lang-zh>接收多個按預測效能指標排序的優化序列。每個候選序列以 FASTA/PDB 格式交付，包含詳細分析報告與模擬驗證數據，便於您的決策與後續實驗驗證。</span><span data-lang-en>Receive optimized sequences ranked by predicted performance. Each candidate is delivered in FASTA/PDB with analysis and simulation data for decision-making and validation.</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trust / Credibility Section -->
+            <section class="section content-section">
+                <div class="section-title">
+                    <h2><span data-lang-zh>基於業界標準</span><span data-lang-en>Industry-Standard Framework</span></h2>
+                    <p><span data-lang-zh>建構在成熟的計算生物學框架之上</span><span data-lang-en>Built on established computational biology frameworks</span></p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto; text-align: center;">
+                    <div style="padding: 2rem; background: var(--bg-light); border-radius: 12px;">
+                        <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;"><span data-lang-zh>深度學習</span><span data-lang-en>Deep Learning</span></h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light);"><span data-lang-zh>神經網路架構</span><span data-lang-en>Neural network architectures</span></p>
+                    </div>
+                    <div style="padding: 2rem; background: var(--bg-light); border-radius: 12px;">
+                        <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;"><span data-lang-zh>結構生物學</span><span data-lang-en>Structural Biology</span></h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light);"><span data-lang-zh>蛋白質折疊預測</span><span data-lang-en>Protein folding prediction</span></p>
+                    </div>
+                    <div style="padding: 2rem; background: var(--bg-light); border-radius: 12px;">
+                        <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;"><span data-lang-zh>分子動力學</span><span data-lang-en>Molecular Dynamics</span></h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light);"><span data-lang-zh>穩定性驗證</span><span data-lang-en>Stability validation</span></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo-group" aria-label="SeednSeek">
+                        <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                    </div>
+                    <h3>SeednSeek</h3>
+                    <p class="footer-tagline"><span data-lang-zh>蛋白質設計優化平台</span><span data-lang-en>Protein Design Optimization Platform</span></p>
+                </div>
+                <div class="footer-links-section">
+                    <h4><span data-lang-zh>快速連結</span><span data-lang-en>Quick Links</span></h4>
+                    <ul>
+                        <li><a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4><span data-lang-zh>聯絡資訊</span><span data-lang-en>Contact</span></h4>
+                    <p><strong>Email:</strong> <a href="mailto:seednseek.ai@gmail.com">seednseek.ai@gmail.com</a></p>
+                    <p><strong>IG:</strong> <a href="https://www.instagram.com/seednseek.ai?igsh=MTFzczduY2ZvYWhwMA%3D%3D&utm_source=q" target="_blank" rel="noopener noreferrer">seednseek.ai</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/seednseek" target="_blank" rel="noopener noreferrer">SeednSeek</a></p>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/seednseekai" target="_blank" rel="noopener noreferrer">seednseekai</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 SeednSeek. All rights reserved.</span>
+                <div class="footer-legal">
+                    <a href="privacy.html"><span data-lang-zh>隱私政策</span><span data-lang-en>Privacy</span></a>
+                    <a href="terms.html"><span data-lang-zh>服務條款</span><span data-lang-en>Terms</span></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Protein 3D Visualization Script - Scrollytelling -->
+    <script>
+        // ==================================================
+        // 全域變數宣告
+        // ==================================================
+        var stages = [];
+        var stageStruct, stageFluoro, stageSeq;
+        
+        // 核心狀態變數
+        var currentCarouselIndex = 1; // 預設顯示中間
+        var isCarouselLocked = false; // "鎖定狀態"：true=按鈕控制, false=滾動控制
+        
+        // 旋轉同步變數
+        var globalRotationY = 0; // 全局旋轉角度
+        var loadedStages = []; // 已載入的 stage 列表
+        var isRotationSynced = false; // 是否已同步旋轉
+        
+        // 滾動方向追蹤（用於凍結機制）
+        var lastProgress = 0; // 上一次的進度值
+
+        // ==================================================
+        // 手機/平板：自動幻燈片 (每 2 秒切換)
+        // ==================================================
+        var slideshowTimer = null;
+        var slideshowStarted = false;
+        var slideshowIntervalMs = 2000;
+
+        function isMobileOrTablet() {
+            // 只針對「手機」啟用幻燈片；平板/桌機維持原本三個分離
+            // 同時避免桌機只是把視窗縮到很窄就被判定成手機
+            var w = window.innerWidth || 0;
+            if (w >= 768) return false;
+
+            var coarsePointer = false;
+            try {
+                if (window.matchMedia) {
+                    coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+                }
+            } catch (_) {}
+
+            var hasTouchPoints = false;
+            try { hasTouchPoints = (navigator.maxTouchPoints || 0) > 0; } catch (_) {}
+
+            var ua = "";
+            try { ua = navigator.userAgent || ""; } catch (_) {}
+            var mobileUA = /Android|iPhone|iPod|Mobile/i.test(ua);
+
+            return coarsePointer || hasTouchPoints || mobileUA;
+        }
+
+        function setSlideshowMode(enabled) {
+            try {
+                if (!document.body) return;
+                if (enabled) document.body.classList.add('slideshow-mode');
+                else document.body.classList.remove('slideshow-mode');
+            } catch (_) {}
+        }
+
+        function prepareSlideshowLabels() {
+            var labels = document.getElementById('labels-wrapper');
+            if (!labels) return;
+
+            // 固定在同一個位置，不要每次切換都上下位移
+            labels.style.opacity = 1;
+            labels.style.transform = "translateX(-50%) translateY(0)";
+
+            // 固定 wrapper 高度，避免不同段落高度造成「上下跳」
+            var labelItems = labels.querySelectorAll('.protein-label-item');
+            var maxH = 0;
+
+            labelItems.forEach(function(item) {
+                item.style.display = "block";
+                item.style.opacity = "1"; // 先全部顯示來量高度
+            });
+
+            labelItems.forEach(function(item) {
+                var h = 0;
+                try { h = item.getBoundingClientRect().height; } catch (_) {}
+                if (h > maxH) maxH = h;
+            });
+
+            if (maxH > 0) labels.style.height = Math.ceil(maxH) + "px";
+        }
+
+        function applySlideshowFrame(activeIndex) {
+            var itemStruct = document.getElementById('item-structure');
+            var itemFluoro = document.getElementById('item-fluorescence');
+            var itemSeq = document.getElementById('item-sequence');
+            var labels = document.getElementById('labels-wrapper');
+
+            var items = [
+                { el: itemStruct, idx: 0 },
+                { el: itemFluoro, idx: 1 },
+                { el: itemSeq, idx: 2 }
+            ];
+
+            items.forEach(function(entry) {
+                if (!entry.el) return;
+                entry.el.style.transition = "opacity 0.45s ease";
+                entry.el.style.transform = "translate(-50%, -50%)"; // 全部疊在一起
+                entry.el.style.visibility = "visible";
+                if (entry.idx === activeIndex) {
+                    entry.el.style.opacity = "1";
+                    entry.el.style.zIndex = "110";
+                } else {
+                    entry.el.style.opacity = "0";
+                    entry.el.style.zIndex = "100";
+                }
+            });
+
+            // 文字：只顯示當前那一段
+            if (labels) {
+                var labelItems = labels.querySelectorAll('.protein-label-item');
+                labelItems.forEach(function(item, index) {
+                    item.style.transition = "opacity 0.35s ease";
+                    if (index === activeIndex) {
+                        item.style.display = "block";
+                        item.style.opacity = "1";
+                    } else {
+                        // 不要用 display none（會讓 wrapper 高度改變 -> 文字上下跳）
+                        item.style.display = "block";
+                        item.style.opacity = "0";
+                    }
+                });
+            }
+        }
+
+        function startSlideshow() {
+            if (slideshowTimer) return;
+            slideshowStarted = true;
+            setSlideshowMode(true);
+            prepareSlideshowLabels();
+            currentCarouselIndex = 0; // 從第一張開始（結構）
+            applySlideshowFrame(currentCarouselIndex);
+            slideshowTimer = setInterval(function() {
+                currentCarouselIndex = (currentCarouselIndex + 1) % 3;
+                applySlideshowFrame(currentCarouselIndex);
+            }, slideshowIntervalMs);
+        }
+
+        function stopSlideshowAndReset() {
+            if (slideshowTimer) {
+                clearInterval(slideshowTimer);
+                slideshowTimer = null;
+            }
+            slideshowStarted = false;
+            setSlideshowMode(false);
+
+            // 回到「疊圖」狀態：三個都可見但半透明，文字先隱藏（讓 slogan 段落主導）
+            var itemStruct = document.getElementById('item-structure');
+            var itemFluoro = document.getElementById('item-fluorescence');
+            var itemSeq = document.getElementById('item-sequence');
+            var labels = document.getElementById('labels-wrapper');
+            [itemStruct, itemFluoro, itemSeq].forEach(function(el) {
+                if (!el) return;
+                el.style.transition = "opacity 0.2s linear";
+                el.style.transform = "translate(-50%, -50%)";
+                el.style.opacity = "0.5";
+                el.style.visibility = "visible";
+                el.style.zIndex = "101";
+            });
+            if (labels) {
+                labels.style.height = ""; // 清掉幻燈片固定高度
+                labels.style.opacity = 0;
+                labels.style.transform = "translateX(-50%) translateY(30px)";
+                resetLabelsForScrollMode();
+            }
+        }
+
+        // ==================================================
+        // 1. NGL 初始化 (維持不變)
+        // ==================================================
+        function initNGL() {
+            if (typeof NGL === 'undefined') {
+                setTimeout(initNGL, 200);
+                return;
+            }
+
+            function loadStage(id, type) {
+                var el = document.getElementById(id);
+                if(!el) return null;
+
+                var stage = new NGL.Stage(id, { 
+                    backgroundColor: "white", 
+                    tooltip: false,
+                    sampleLevel: 2
+                });
+                
+                setTimeout(function() {
+                    if (stage.viewer && stage.viewer.renderer) {
+                        stage.viewer.renderer.setClearColor(0x000000, 0);
+                        stage.viewer.renderer.clear();
+                    }
+                }, 300);
+                
+                stage.mouseControls.clear();
+                stages.push(stage);
+                
+                stage.loadFile("https://files.rcsb.org/download/1EMA.pdb").then(function(o){
+                    o.removeAllRepresentations();
+                    
+                    if(type === 'structure') {
+                        o.addRepresentation("surface", {
+                            sele: "all", color: "gray", opacity: 1.0, surfaceType: "av", probeRadius: 1.4, quality: "high"
+                        });
+                    } 
+                    else if (type === 'fluorescence') {
+                        o.addRepresentation("cartoon", { color: "#00ff00", opacity: 1.0, quality: "high" });
+                        o.addRepresentation("licorice", { sele: "CRO", color: "#00ff00", radius: 7.0, opacity: 0.1 }); 
+                        o.addRepresentation("licorice", { sele: "CRO", color: "#66ff66", radius: 5.0, opacity: 0.5 }); 
+                        o.addRepresentation("licorice", { sele: "CRO", color: "#F4FAEE", radius: 3.0, opacity: 1.0 }); 
+                        o.addRepresentation("surface", {
+                            sele: "all", color: "#00ff00", opacity: 0.25, surfaceType: "av", probeRadius: 1.4, quality: "high", side: "front"
+                        });
+                    } 
+                    else if (type === 'sequence') {
+                        o.addRepresentation("cartoon", { colorScheme: "residueindex", opacity: 1.0, quality: "high" });
+                    }
+                    o.autoView();
+                    
+                    // 記錄已載入的 stage
+                    loadedStages.push(stage);
+                    
+                    // 如果三個都載入了，同步旋轉角度
+                    if (loadedStages.length === 3 && !isRotationSynced) {
+                        syncRotation();
+                    }
+                    
+                    // 啟動旋轉
+                    stage.setSpin(true);
+                }).catch(e => console.error("Load failed:", e));
+                return stage;
+            }
+
+            stageStruct = loadStage("stage-structure", "structure");
+            setTimeout(() => stageFluoro = loadStage("stage-fluorescence", "fluorescence"), 200);
+            setTimeout(() => stageSeq = loadStage("stage-heatmap", "sequence"), 400);
+        }
+
+        // ==================================================
+        // 旋轉同步函數
+        // ==================================================
+        function syncRotation() {
+            if (isRotationSynced || loadedStages.length < 3) return;
+            
+            isRotationSynced = true;
+            
+            // 使用 Quaternion 設定統一的初始角度
+            var q = new NGL.Quaternion();
+            q.setFromAxisAngle({ x: 0, y: 1, z: 0 }, globalRotationY);
+            
+            // 對所有已載入的 stage 應用相同的角度
+            loadedStages.forEach(function(stage) {
+                if (stage && stage.viewerControls) {
+                    try {
+                        stage.viewerControls.orient(q);
+                    } catch(e) {
+                        console.warn("Rotation sync error:", e);
+                    }
+                }
+            });
+        }
+
+        // ==================================================
+        // 2. 滾動監聽 (修正重點：寬緩衝區間)
+        // ==================================================
+        function handleScrollAnimation() {
+            var section = document.getElementById('scrolly-section');
+            if (!section) return;
+
+            var wrapper = document.getElementById('protein-wrapper');
+            var slogan = document.getElementById('slogan-wrapper');
+            var labels = document.getElementById('labels-wrapper');
+            var carouselPrev = document.getElementById('carousel-prev');
+            var carouselNext = document.getElementById('carousel-next');
+
+            // 取得 3D 畫布物件
+            var itemStruct = document.getElementById('item-structure');
+            var itemFluoro = document.getElementById('item-fluorescence');
+            var itemSeq = document.getElementById('item-sequence');
+
+            var isMobile = window.innerWidth < 768;
+            var isSlideshowMobile = isMobileOrTablet(); // 手機才 true
+            var rect = section.getBoundingClientRect();
+            var scrollDistance = rect.height - window.innerHeight;
+            
+            // 計算原始進度 0.0 ~ 1.0
+            var rawProgress = Math.max(0, Math.min(1, -rect.top / scrollDistance));
+            
+            // 判斷滾動方向（true = 往下滑，false = 往上滑）
+            var isScrollingDown = rawProgress > lastProgress;
+            lastProgress = rawProgress;
+
+            // 只要離開手機模式（平板/桌機），立刻停止幻燈片並清掉樣式，避免「卡在幻燈片」
+            if (!isSlideshowMobile && slideshowStarted) {
+                stopSlideshowAndReset();
+            }
+
+            // 手機：不用凍結機制（避免干擾「滑一下就進入幻燈片」的體感）
+            var progress;
+            var sloganProgress;
+            if (isSlideshowMobile) {
+                progress = rawProgress;
+                sloganProgress = rawProgress;
+            } else {
+                // === 問題 3：增加凍結機制 ===
+                // 當圖片完全分離後（progress > 0.8），需要額外的滾動才能繼續
+                // 往上滑不受影響（只在下滑時應用凍結）
+                var freezeStart = 0.8; // 開始凍結的進度點
+                var freezeAmount = 0.15; // 凍結的額外滾動量（相當於 15% 的滾動距離）
+                
+                if (isScrollingDown && rawProgress > freezeStart) {
+                    // 往下滑且超過凍結點：應用凍結，需要額外滾動
+                    var excessProgress = rawProgress - freezeStart;
+                    progress = freezeStart + (excessProgress / (1 + freezeAmount / (1 - freezeStart)));
+                } else {
+                    // 往上滑或未到凍結點：正常進度
+                    progress = rawProgress;
+                }
+                
+                // Slogan 區域也應用相同的凍結機制
+                var sloganFreezeStart = 0.2; // Slogan 開始淡出的點
+                var sloganFreezeAmount = 0.1; // Slogan 區域的凍結量
+                
+                if (isScrollingDown && rawProgress > sloganFreezeStart) {
+                    var sloganExcess = rawProgress - sloganFreezeStart;
+                    sloganProgress = sloganFreezeStart + (sloganExcess / (1 + sloganFreezeAmount / (1 - sloganFreezeStart)));
+                } else {
+                    sloganProgress = rawProgress;
+                }
+            }
+
+            // --- A. Slogan / 疊圖定位 (任何模式都執行) ---
+            // 疊圖要「跟 slogan 一起出現」且位置固定：不要再做從底部往上跑的動畫
+            if (wrapper) {
+                var viewportWidth = window.innerWidth || 1200;
+                // 你截圖那種「平板感」寬度通常在 768~1199：這個區間往上移一點
+                var isTabletLayout = (viewportWidth >= 768 && viewportWidth < 1200);
+                var fixedTop = isTabletLayout ? 43 : 50;
+                wrapper.style.top = fixedTop + "%";
+            }
+
+            if (slogan) {
+                if (isMobile) {
+                    slogan.style.flexDirection = "column";
+                    slogan.style.padding = "55% 5% 35% 5%";
+                    slogan.style.gap = "20rem";
+                    slogan.style.justifyContent = "space-between";
+                    slogan.style.top = "0";
+                    slogan.style.transform = "none";
+                } else {
+                    slogan.style.flexDirection = "row";
+                    slogan.style.justifyContent = "space-between";
+                    slogan.style.padding = "0 10%";
+                    slogan.style.top = "50%";
+                    slogan.style.transform = "translateY(-50%)";
+                }
+                // Slogan 隨進度淡出（使用 sloganProgress）
+                var fadeOut = sloganProgress > 0.2 ? (sloganProgress - 0.2) / 0.15 : 0;
+                slogan.style.opacity = Math.max(0, 1 - fadeOut);
+            }
+
+            // ==================================================
+            // 手機模式：slogan 結束後改成自動幻燈片（全部疊在一起）
+            // ==================================================
+            if (isSlideshowMobile) {
+                // 不要箭頭、不要手動滑動輪播
+                if (carouselPrev) { carouselPrev.style.display = "none"; carouselPrev.style.pointerEvents = "none"; }
+                if (carouselNext) { carouselNext.style.display = "none"; carouselNext.style.pointerEvents = "none"; }
+
+                // slogan 走完後（約 progress >= 0.35）開始幻燈片
+                // 修 bug：回滑進來時 rect.top 可能 > 0，舊條件會導致「先跑分離、再回來才變幻燈片」
+                var inViewport = rect.bottom > 0 && rect.top < window.innerHeight;
+                if (progress >= 0.35 && inViewport) {
+                    if (!slideshowStarted) startSlideshow();
+                } else {
+                    if (slideshowStarted) stopSlideshowAndReset();
+                }
+
+                // 手機：不管幻燈片有沒有啟動，都不要進入「分離/鎖定」邏輯
+                // - 幻燈片已啟動：直接 return（已由 applySlideshowFrame 控制）
+                // - 幻燈片未啟動：強制維持「疊圖」狀態，避免你看到三個圖片分離
+                if (!slideshowStarted) {
+                    [itemStruct, itemFluoro, itemSeq].forEach(function(el) {
+                        if (!el) return;
+                        el.style.transition = "opacity 0.2s linear";
+                        el.style.transform = "translate(-50%, -50%)";
+                        el.style.opacity = "0.5";
+                        el.style.visibility = "visible";
+                        el.style.zIndex = "101";
+                    });
+                    if (labels) {
+                        labels.style.opacity = 0;
+                        labels.style.transform = "translateX(-50%) translateY(30px)";
+                    }
+                }
+                return;
+            }
+
+            // --- B. 鎖定判定邏輯 (Hysteresis) ---
+            if (isMobile) {
+                // 1. 進場門檻 (90%)：滑得很深才鎖定
+                if (!isCarouselLocked && progress > 0.90) {
+                    isCarouselLocked = true;
+                    console.log("狀態變更 -> 鎖定 (顯示按鈕)");
+
+                    // 顯示按鈕與文字
+                    if(carouselPrev) { carouselPrev.style.display = "flex"; carouselPrev.style.opacity = "1"; carouselPrev.style.pointerEvents = "auto"; }
+                    if(carouselNext) { carouselNext.style.display = "flex"; carouselNext.style.opacity = "1"; carouselNext.style.pointerEvents = "auto"; }
+                    if(labels) { labels.style.opacity = 1; labels.style.transform = "translateX(-50%) translateY(0)"; }
+                    
+                    // 執行一次位置初始化
+                    updateCarouselDisplay();
+                } 
+                // 2. 離場門檻 (75%)：必須往回滑很多才解鎖 (避免跳動)
+                else if (isCarouselLocked && progress < 0.75) {
+                    isCarouselLocked = false;
+                    console.log("狀態變更 -> 解鎖 (隱藏按鈕)");
+
+                    // 隱藏按鈕
+                    if(carouselPrev) { carouselPrev.style.opacity = "0"; carouselPrev.style.pointerEvents = "none"; setTimeout(()=>carouselPrev.style.display="none", 300); }
+                    if(carouselNext) { carouselNext.style.opacity = "0"; carouselNext.style.pointerEvents = "none"; setTimeout(()=>carouselNext.style.display="none", 300); }
+
+                    // 回到正常滾動模式時，復原三段文字（避免只剩一段「功能...」）
+                    resetLabelsForScrollMode();
+                }
+            } else {
+                // 電腦版永遠不鎖定
+                isCarouselLocked = false;
+
+                // 若曾在手機輪播模式把文字隱藏，切回桌機時必須復原
+                resetLabelsForScrollMode();
+            }
+
+            // --- C. 根據鎖定狀態決定誰控制位置 ---
+
+            if (isCarouselLocked) {
+                // 【關鍵點】
+                // 如果鎖定了，這裡直接 return。
+                // 滾動程式碼「完全禁止」碰觸圖片位置，將控制權 100% 交給 updateCarouselDisplay 和按鈕。
+                return;
+            }
+
+            // --- D. 滾動分離模式 (非鎖定時執行) ---
+
+            // Labels 淡入淡出 (電腦版邏輯)
+            // === 問題 1：往上滑時文字要淡出 ===
+            if (labels && !isMobile) {
+                if (progress > 0.8) {
+                    var labelAlpha = (progress - 0.8) / 0.2;
+                    labels.style.opacity = labelAlpha;
+                    labels.style.transform = `translateX(-50%) translateY(${(1-labelAlpha)*20}px)`;
+                } else {
+                    // 當 progress < 0.8 時，文字要淡出（往上滑時）
+                    labels.style.opacity = 0;
+                    labels.style.transform = "translateX(-50%) translateY(20px)";
+                }
+            } else if (labels && isMobile) {
+                // 手機版：當往上滑到 slogan 區域時（progress < 0.75），文字要淡出
+                if (progress < 0.75) {
+                    labels.style.opacity = 0;
+                    labels.style.transform = "translateX(-50%) translateY(20px)";
+                }
+            }
+
+            // 計算分離距離 (Separate)
+            var separateProgress = 0;
+            if (progress > 0.35) {
+                separateProgress = Math.min(1, (progress - 0.35) / 0.45);
+            }
+            
+            // 平板對齊下方三欄文字：offset 依螢幕寬度縮放
+            // 桌機（寬度夠大）維持你原本的固定 380，不去動它
+            var vw = (window.innerWidth || 1200);
+            var maxOffset;
+            if (isMobile) maxOffset = 120;
+            else if (vw >= 1200) maxOffset = 380;
+            else maxOffset = Math.min(380, Math.round(vw * 0.27));
+            var currentOffset = separateProgress * maxOffset;
+            var baseOpacity = 0.5;
+            var targetOpacity = baseOpacity + (separateProgress * (1.0 - baseOpacity));
+
+            // 設定樣式 (關閉 Transition 以獲得即時滾動反應)
+            [itemStruct, itemFluoro, itemSeq].forEach(el => {
+                if(el) {
+                    el.style.transition = "none"; // 滾動時關閉動畫，避免延遲
+                    el.style.visibility = "visible";
+                }
+            });
+
+            // 寫入位置
+            if (itemStruct) {
+                itemStruct.style.transform = `translate(calc(-50% - ${currentOffset}px), -50%)`;
+                itemStruct.style.opacity = progress <= 0.35 ? baseOpacity : targetOpacity;
+            }
+            if (itemSeq) {
+                itemSeq.style.transform = `translate(calc(-50% + ${currentOffset}px), -50%)`;
+                itemSeq.style.opacity = progress <= 0.35 ? baseOpacity : targetOpacity;
+            }
+            if (itemFluoro) {
+                itemFluoro.style.transform = `translate(-50%, -50%)`; // 居中
+                itemFluoro.style.opacity = progress <= 0.35 ? baseOpacity : targetOpacity;
+            }
+        }
+
+        // ==================================================
+        // 3. 輪播控制邏輯 (負責滑入滑出)
+        // ==================================================
+        function resetLabelsForScrollMode() {
+            var labels = document.getElementById('labels-wrapper');
+            if (!labels) return;
+            var labelItems = labels.querySelectorAll('.protein-label-item');
+            labelItems.forEach(function(item) {
+                item.style.display = "block";
+                item.style.opacity = "1";
+            });
+        }
+
+        function updateCarouselDisplay() {
+            var itemStruct = document.getElementById('item-structure');
+            var itemFluoro = document.getElementById('item-fluorescence');
+            var itemSeq = document.getElementById('item-sequence');
+            var labels = document.getElementById('labels-wrapper');
+            
+            var screenWidth = window.innerWidth;
+            // 偏移量：設大一點確保移出畫面
+            var offsetDist = screenWidth < 768 ? screenWidth * 1.5 : 400; 
+
+            // Helper: 設定單一元件位置
+            function setStyle(el, pos) {
+                if (!el) return;
+                // 按鈕控制時，開啟 Transition 產生滑順動畫
+                el.style.transition = "transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.5s ease";
+                el.style.opacity = "1";
+                el.style.visibility = "visible";
+
+                if (pos === 'center') {
+                    el.style.transform = "translate(-50%, -50%) scale(1)";
+                    el.style.zIndex = "110"; // 中間層級最高
+                } else if (pos === 'left') {
+                    el.style.transform = `translate(calc(-50% - ${offsetDist}px), -50%) scale(0.8)`;
+                    el.style.zIndex = "100";
+                } else if (pos === 'right') {
+                    el.style.transform = `translate(calc(-50% + ${offsetDist}px), -50%) scale(0.8)`;
+                    el.style.zIndex = "100";
+                }
+            }
+            
+            // 根據 currentCarouselIndex 排列 (0:結構, 1:螢光, 2:序列)
+            // 使用循環差值：上一張永遠在左、下一張永遠在右（方便做「滑入滑出 + 輪迴」）
+            [
+                { el: itemStruct, idx: 0 },
+                { el: itemFluoro, idx: 1 },
+                { el: itemSeq, idx: 2 }
+            ].forEach(function(entry) {
+                var diff = (entry.idx - currentCarouselIndex + 3) % 3;
+                if (diff === 0) setStyle(entry.el, 'center');
+                else if (diff === 1) setStyle(entry.el, 'right');
+                else setStyle(entry.el, 'left');
+            });
+            
+            // 更新下方文字標籤
+            if (labels) {
+                var labelItems = labels.querySelectorAll('.protein-label-item');
+                labelItems.forEach(function(item, index) {
+                    item.style.transition = "opacity 0.3s ease";
+                    if (index === currentCarouselIndex) {
+                        item.style.display = "block";
+                        // 小技巧：requestAnimationFrame 確保 display生效後再淡入
+                        requestAnimationFrame(() => item.style.opacity = "1");
+                    } else {
+                        item.style.opacity = "0";
+                        setTimeout(() => item.style.display = "none", 300);
+                    }
+                });
+            }
+        }
+
+        // 按鈕觸發函式
+        function switchCarousel(direction) {
+            console.log("按鈕點擊:", direction);
+            
+            if (direction === 'next') {
+                currentCarouselIndex = (currentCarouselIndex + 1) % 3;
+            } else {
+                currentCarouselIndex = (currentCarouselIndex - 1 + 3) % 3;
+            }
+            updateCarouselDisplay();
+        }
+
+        // ==================================================
+        // 4. 事件綁定 (DOMContentLoaded)
+        // ==================================================
+        document.addEventListener("DOMContentLoaded", function() {
+            initNGL();
+            
+            // 滾動事件綁定
+            window.addEventListener('scroll', () => window.requestAnimationFrame(handleScrollAnimation));
+            
+            window.addEventListener('resize', () => {
+                stages.forEach(s => s.handleResize());
+                handleScrollAnimation();
+            });
+            
+            // 綁定按鈕 (使用純 click，避免 touchstart 衝突)
+            var carouselPrev = document.getElementById('carousel-prev');
+            var carouselNext = document.getElementById('carousel-next');
+
+            // 你要的行為：手機（幻燈片）不要箭頭、不要手動滑動
+            if (isMobileOrTablet()) {
+                if (carouselPrev) { carouselPrev.style.display = "none"; carouselPrev.style.pointerEvents = "none"; }
+                if (carouselNext) { carouselNext.style.display = "none"; carouselNext.style.pointerEvents = "none"; }
+            }
+
+            // 預設先關閉點擊（避免透明狀態下誤觸），進入鎖定模式時再開啟
+            if (carouselPrev) carouselPrev.style.pointerEvents = "none";
+            if (carouselNext) carouselNext.style.pointerEvents = "none";
+            
+            if (carouselPrev) {
+                carouselPrev.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    switchCarousel('prev');
+                };
+            }
+            if (carouselNext) {
+                carouselNext.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    switchCarousel('next');
+                };
+            }
+            
+            // 初始化執行一次
+            setTimeout(function() {
+                handleScrollAnimation();
+                
+                // 桌面版預設半透明 (手機版由 ScrollAnimation 控制)
+                if (window.innerWidth >= 768) {
+                    var items = document.querySelectorAll('.protein-viewer-item');
+                    items.forEach(el => el.style.opacity = '0.5');
+                }
+            }, 500);
+
+            // 手機 Safari 偶發：重整後視窗寬度 / WebGL canvas 尺寸會短暫算錯，導致整頁被撐寬可左右拖
+            // 在 load/pageshow 再強制做一次 resize + 重新計算 scroll 狀態，讓版面穩定
+            function forceLayoutStabilize() {
+                try {
+                    stages.forEach(function(s) {
+                        try { s.handleResize(); } catch (_) {}
+                    });
+                } catch (_) {}
+                try { handleScrollAnimation(); } catch (_) {}
+            }
+
+            window.addEventListener('load', function() {
+                setTimeout(forceLayoutStabilize, 50);
+                setTimeout(forceLayoutStabilize, 300);
+            });
+
+            window.addEventListener('pageshow', function(e) {
+                // bfcache / 重新進入頁面時也做一次
+                if (e && e.persisted) {
+                    setTimeout(forceLayoutStabilize, 50);
+                } else {
+                    setTimeout(forceLayoutStabilize, 50);
+                }
+            });
+        });
+    </script>
+    <!-- 語言拉桿：內聯確保首頁一定可切換 -->
+    <script>
+    (function() {
+        var STORAGE_KEY = 'seednseek-lang';
+        function getLang() {
+            try { var s = localStorage.getItem(STORAGE_KEY); if (s === 'en' || s === 'zh') return s; } catch (_) {}
+            return 'zh';
+        }
+        function setLang(lang) {
+            try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) {}
+            if (!document.body) return;
+            document.documentElement.lang = lang === 'en' ? 'en' : 'zh-Hant';
+            document.body.classList.remove('lang-zh', 'lang-en');
+            document.body.classList.add('lang-' + lang);
+            var btns = document.querySelectorAll('.lang-toggle-btn');
+            for (var i = 0; i < btns.length; i++) {
+                var b = btns[i];
+                var on = b.getAttribute('data-lang') === lang;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            }
+        }
+        function findLangToggle(el) {
+            while (el && el !== document.body) {
+                if (el.classList && el.classList.contains('lang-toggle')) return el;
+                el = el.parentNode;
+            }
+            return null;
+        }
+        var current = getLang();
+        document.body.classList.add('lang-' + current);
+        document.documentElement.lang = current === 'en' ? 'en' : 'zh-Hant';
+        var btns = document.querySelectorAll('.lang-toggle-btn');
+        for (var j = 0; j < btns.length; j++) {
+            var btn = btns[j];
+            var on = btn.getAttribute('data-lang') === current;
+            btn.classList.toggle('active', on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+        document.body.addEventListener('click', function(e) {
+            var lever = findLangToggle(e.target);
+            if (!lever) return;
+            e.preventDefault();
+            e.stopPropagation();
+            var isZh = document.body.classList.contains('lang-zh');
+            var next = isZh ? 'en' : 'zh';
+            setLang(next);
+        }, true);
+    })();
+    </script>
+</body>
+</html>
+

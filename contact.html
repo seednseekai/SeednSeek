@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聯絡我們 | SeednSeek</title>
+    <meta name="description" content="聯繫 SeednSeek，開始您的蛋白質設計優化專案。">
+    <link rel="icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="apple-touch-icon" href="logo/sns_short_logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="components/load-components.js" defer></script>
+    <script src="components/lang-switcher.js" defer></script>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="header-container">
+                <a class="logo-group" href="index.html" aria-label="SeednSeek 首頁">
+                    <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                </a>
+                <nav class="primary-nav" aria-label="主選單">
+                    <ul>
+                        <li><a href="index.html" data-nav="home"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html" data-nav="about"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="collab-methods.html" data-nav="collab"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html" data-nav="contact"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </nav>
+                <div class="lang-toggle" role="group" aria-label="Language">
+                    <button type="button" class="lang-toggle-btn" data-lang="zh" aria-pressed="true">中文</button>
+                    <button type="button" class="lang-toggle-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a>
+                <a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a>
+                <a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a>
+                <a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Contact Section -->
+            <section class="section">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h2><span data-lang-zh>準備優化您的序列？</span><span data-lang-en>Ready to Optimize Your Sequence?</span></h2>
+                        <p style="margin-bottom: 2rem; color: var(--text-light);">
+                            <span data-lang-zh>告訴我們您的目標，我們將為您提供專業的計算蛋白質優化服務。提交您的原型序列與優化需求，我們的團隊將在 24-48 小時內與您聯繫。</span>
+                            <span data-lang-en>Share your goals and we will provide professional computational protein optimization. Submit your prototype sequence and optimization needs; our team will get back to you within 24–48 hours.</span>
+                        </p>
+                        <div class="contact-item">
+                            <h3><span data-lang-zh>業務聯絡</span><span data-lang-en>Business Contact</span></h3>
+                            <p><strong>Email:</strong> <a href="mailto:seednseek.ai@gmail.com">seednseek.ai@gmail.com</a></p>
+                        </div>
+                        <div style="margin-top: 2rem; padding: 2rem; background: var(--bg-light); border-radius: 12px;">
+                            <h3 style="color: var(--primary-green-dark); margin-bottom: 1rem;"><span data-lang-zh>資料安全保證</span><span data-lang-en>Data Security</span></h3>
+                            <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                                <span data-lang-zh>✓ 所有提交資料均經過企業級加密處理</span><span data-lang-en>✓ All submissions are encrypted at enterprise level</span>
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                                <span data-lang-zh>✓ 保密協議（NDA）可依需求提供</span><span data-lang-en>✓ NDA available upon request</span>
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">
+                                <span data-lang-zh>✓ 您的序列資料不會用於訓練公開模型</span><span data-lang-en>✓ Your sequence data is never used to train public models</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h2><span data-lang-zh>專案需求表單</span><span data-lang-en>Project Request Form</span></h2>
+                        <p style="margin-bottom: 2rem; color: var(--text-light);">
+                            <span data-lang-zh>請詳細填寫以下資訊，有助於我們為您提供準確的報價與專案規劃。</span>
+                            <span data-lang-en>Please fill in the details below so we can provide an accurate quote and project plan.</span>
+                        </p>
+                        <form id="contactForm" action="#" method="post">
+                            <div class="form-group">
+                                <label for="name"><span data-lang-zh>姓名 / 公司名稱 *</span><span data-lang-en>Name / Company *</span></label>
+                                <input type="text" id="name" name="name" required data-placeholder-zh="請輸入您的姓名或公司名稱" data-placeholder-en="Your name or company">
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><span data-lang-zh>電子郵件 *</span><span data-lang-en>Email *</span></label>
+                                <input type="email" id="email" name="email" required data-placeholder-zh="請輸入電子郵件" data-placeholder-en="your.email@company.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone"><span data-lang-zh>電話號碼</span><span data-lang-en>Phone</span></label>
+                                <input type="tel" id="phone" name="phone" data-placeholder-zh="請輸入您的電話號碼（選填）" data-placeholder-en="Phone (optional)">
+                            </div>
+                            <div class="form-group">
+                                <label for="projectType"><span data-lang-zh>專案類型 *</span><span data-lang-en>Project Type *</span></label>
+                                <select id="projectType" name="projectType" required style="width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; font-family: inherit;">
+                                    <option value="" data-lang-zh="請選擇專案類型" data-lang-en="Select project type"></option>
+                                    <option value="enzyme-stability" data-lang-zh="酵素穩定性優化" data-lang-en="Enzyme stability optimization"></option>
+                                    <option value="antibody-affinity" data-lang-zh="抗體親和力優化" data-lang-en="Antibody affinity optimization"></option>
+                                    <option value="de-novo-design" data-lang-zh="從頭設計" data-lang-en="De novo design"></option>
+                                    <option value="thermostability" data-lang-zh="熱穩定性提升" data-lang-en="Thermostability improvement"></option>
+                                    <option value="solubility" data-lang-zh="溶解度改善" data-lang-en="Solubility improvement"></option>
+                                    <option value="specificity" data-lang-zh="結合特異性優化" data-lang-en="Binding specificity optimization"></option>
+                                    <option value="other" data-lang-zh="其他" data-lang-en="Other"></option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom: 1rem; padding: 0.75rem; background: #f0f7f4; border-left: 3px solid var(--primary-green); border-radius: 4px; font-size: 0.85rem; color: var(--text-dark); line-height: 1.4;">
+                                <strong style="color: var(--primary-green-dark);"><span data-lang-zh>重要提醒：</span><span data-lang-en>Note:</span></strong>
+                                <span data-lang-zh>為提供精準的客製化設計，我們需要專人密切了解專案細節。以下資訊有助於我們更準確掌握需求，如有其他補充歡迎隨時聯繫。</span>
+                                <span data-lang-en>For accurate custom design we need to understand your project in detail. The information below helps us capture your needs; feel free to add more.</span>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label for="proteinName" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>目標蛋白質名稱 *</span><span data-lang-en>Target protein name *</span></label>
+                                <input type="text" id="proteinName" name="proteinName" required data-placeholder-zh="例如：葡萄糖氧化酶、抗體 Fab 片段等" data-placeholder-en="e.g. Glucose oxidase, antibody Fab fragment" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit;">
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label for="prototypeSequence" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>參考序列（Prototype Sequence） * <span style="font-weight: normal; color: var(--text-light); font-size: 0.85rem;">FASTA 格式，如有來源文獻請註明</span></span><span data-lang-en>Reference sequence (Prototype) * <span style="font-weight: normal; color: var(--text-light); font-size: 0.85rem;">FASTA format; cite source if applicable</span></span></label>
+                                <textarea id="prototypeSequence" name="prototypeSequence" required rows="3" data-placeholder-zh=">序列名稱&#10;MKTAYIAKQR..." data-placeholder-en=">Sequence name&#10;MKTAYIAKQR..." style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 80px;"></textarea>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label for="knownKnowledge" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>已知結構與功能限制 *</span><span data-lang-en>Known structure & function constraints *</span></label>
+                                <textarea id="knownKnowledge" name="knownKnowledge" required rows="2" data-placeholder-zh="例如：第 45-52 位為活性位點不可變更；第 120-135 位影響四級結構需維持疏水性；C 端 His-tag 需保留等" data-placeholder-en="e.g. Residues 45-52 are active site, immutable; 120-135 affect quaternary structure, keep hydrophobic; retain C-terminal His-tag" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 60px;"></textarea>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label for="targetFunction" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>優化目標與功能需求 *</span><span data-lang-en>Optimization goals & functional requirements *</span></label>
+                                <textarea id="targetFunction" name="targetFunction" required rows="2" data-placeholder-zh="例如：提升熱穩定性至 70°C 以上；改善 pH 4-6 範圍內的活性；增強結合親和力；提高酵素反應速率等" data-placeholder-en="e.g. Improve thermostability to &gt;70°C; activity in pH 4-6; higher binding affinity; increase reaction rate" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 60px;"></textarea>
+                            </div>
+                            
+                            <details style="margin-bottom: 1rem; border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.75rem; background: #fafafa;">
+                                <summary style="cursor: pointer; font-weight: 500; color: var(--text-dark); font-size: 0.95rem; user-select: none; padding: 0.25rem 0;">
+                                    <span data-lang-zh>其他資訊（選填）<span style="font-weight: normal; color: var(--text-light); font-size: 0.85rem; margin-left: 0.5rem;">點擊展開</span></span><span data-lang-en>Additional info (optional) <span style="font-weight: normal; color: var(--text-light); font-size: 0.85rem; margin-left: 0.5rem;">Click to expand</span></span>
+                                </summary>
+                                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                                    <div style="margin-bottom: 1rem;">
+                                        <label for="validationData" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>現有驗證實驗數據</span><span data-lang-en>Existing validation data</span></label>
+                                        <div style="font-size: 0.85rem; color: var(--primary-green-dark); margin-bottom: 0.5rem; font-weight: 500;"><span data-lang-zh>提供詳細的實驗數據可幫助我們進行更準確的分析，建議上傳完整的數據檔案</span><span data-lang-en>Detailed data helps us analyze more accurately; we recommend uploading full data files</span></div>
+                                        <textarea id="validationData" name="validationData" rows="2" data-placeholder-zh="例如：活性為 X U/mg；50°C 下 30 分鐘後活性保留率 60%；IC50 值為 Y μM 等" data-placeholder-en="e.g. Activity X U/mg; 60% activity after 30 min at 50°C; IC50 Y μM" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 60px; margin-bottom: 0.5rem;"></textarea>
+                                        <input type="file" id="validationDataFile" name="validationDataFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.9rem; font-family: inherit; background: white;">
+                                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.3rem;"><span data-lang-zh>支援格式：PDF, Word, Excel, CSV, TXT</span><span data-lang-en>Supported: PDF, Word, Excel, CSV, TXT</span></div>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label for="validationProtocol" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>驗證實驗方法</span><span data-lang-en>Validation protocol</span></label>
+                                        <div style="font-size: 0.85rem; color: var(--primary-green-dark); margin-bottom: 0.5rem; font-weight: 500;"><span data-lang-zh>提供詳細的實驗 protocol 可幫助我們進行更準確的分析，建議上傳完整的 protocol 檔案</span><span data-lang-en>Detailed protocols help us analyze more accurately; we recommend uploading full protocol files</span></div>
+                                        <textarea id="validationProtocol" name="validationProtocol" rows="2" data-placeholder-zh="例如：使用圓二色光譜（CD）檢測二級結構；熱變性實驗評估穩定性；ELISA 或 SPR 測定結合親和力等" data-placeholder-en="e.g. CD for secondary structure; thermal denaturation for stability; ELISA or SPR for binding" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 60px; margin-bottom: 0.5rem;"></textarea>
+                                        <input type="file" id="validationProtocolFile" name="validationProtocolFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.9rem; font-family: inherit; background: white;">
+                                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.3rem;"><span data-lang-zh>支援格式：PDF, Word, Excel, TXT</span><span data-lang-en>Supported: PDF, Word, Excel, TXT</span></div>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label for="timeline" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>專案時程期望</span><span data-lang-en>Expected timeline</span></label>
+                                        <input type="text" id="timeline" name="timeline" data-placeholder-zh="例如：希望在 3-4 週內收到初步設計結果" data-placeholder-en="e.g. Initial design results in 3-4 weeks" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit;">
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label for="otherNotes" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-dark); font-size: 0.95rem;"><span data-lang-zh>其他備註或特殊需求</span><span data-lang-en>Other notes or special requirements</span></label>
+                                        <textarea id="otherNotes" name="otherNotes" rows="2" data-placeholder-zh="任何其他需要補充的資訊或特殊考量" data-placeholder-en="Any other information or special requirements" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 60px;"></textarea>
+                                    </div>
+                                </div>
+                            </details>
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-light); border-radius: 8px; font-size: 0.9rem; color: var(--text-light);">
+                                <strong><span data-lang-zh>免責聲明：</span><span data-lang-en>Disclaimer:</span></strong>
+                                <span data-lang-zh>所有提交資料均經過加密處理。如需要，我們可以簽署保密協議（NDA）以確保最高級別的資料保護。</span>
+                                <span data-lang-en>All submissions are encrypted. We can sign an NDA for maximum data protection if needed.</span>
+                            </div>
+                            <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 1.5rem;"><span data-lang-zh>提交專案需求</span><span data-lang-en>Submit Request</span></button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Info Section -->
+            <section class="section" style="background: var(--bg-light);">
+                <div class="section-title">
+                    <h2><span data-lang-zh>常見問題</span><span data-lang-en>FAQ</span></h2>
+                </div>
+                <div class="features-grid" style="grid-template-columns: 1fr;">
+                    <div class="feature-card">
+                        <h3><span data-lang-zh>如何開始合作？</span><span data-lang-en>How do I get started?</span></h3>
+                        <p><span data-lang-zh>請透過聯絡表單或電子郵件與我們聯繫，提供您的蛋白質序列與功能需求。我們的團隊將進行初步評估，並在 2-3 個工作天內回覆您。</span><span data-lang-en>Contact us via the form or email with your sequence and requirements. We will assess and reply within 2–3 business days.</span></p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span data-lang-zh>專案時程需要多久？</span><span data-lang-en>How long does a project take?</span></h3>
+                        <p><span data-lang-zh>專案時程會根據複雜度而有所不同，一般來說，簡單的優化專案約需 2-4 週，複雜的設計專案可能需要 1-3 個月。我們會在專案開始前提供詳細的時程規劃。</span><span data-lang-en>Timeline depends on complexity: simple optimization typically 2–4 weeks, complex design 1–3 months. We provide a detailed schedule before starting.</span></p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span data-lang-zh>是否提供保密協議？</span><span data-lang-en>Do you offer NDAs?</span></h3>
+                        <p><span data-lang-zh>是的，我們非常重視客戶的資料保密。在專案開始前，我們可以簽署保密協議（NDA），確保您的序列資料與專案資訊的機密性。</span><span data-lang-en>Yes. We take confidentiality seriously and can sign an NDA before the project to protect your sequence and project information.</span></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo-group" aria-label="SeednSeek">
+                        <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                    </div>
+                    <h3>SeednSeek</h3>
+                    <p class="footer-tagline"><span data-lang-zh>蛋白質設計優化平台</span><span data-lang-en>Protein Design Optimization Platform</span></p>
+                </div>
+                <div class="footer-links-section">
+                    <h4><span data-lang-zh>快速連結</span><span data-lang-en>Quick Links</span></h4>
+                    <ul>
+                        <li><a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4><span data-lang-zh>聯絡資訊</span><span data-lang-en>Contact</span></h4>
+                    <p><strong>Email:</strong> <a href="mailto:seednseek.ai@gmail.com">seednseek.ai@gmail.com</a></p>
+                    <p><strong>IG:</strong> <a href="https://www.instagram.com/seednseek.ai?igsh=MTFzczduY2ZvYWhwMA%3D%3D&utm_source=q" target="_blank" rel="noopener noreferrer">seednseek.ai</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/seednseek" target="_blank" rel="noopener noreferrer">SeednSeek</a></p>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/seednseekai" target="_blank" rel="noopener noreferrer">seednseekai</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 SeednSeek. All rights reserved.</span>
+                <div class="footer-legal">
+                    <a href="privacy.html"><span data-lang-zh>隱私政策</span><span data-lang-en>Privacy</span></a>
+                    <a href="terms.html"><span data-lang-zh>服務條款</span><span data-lang-en>Terms</span></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real implementation, this would send data to a server
+            alert('感謝您的訊息！我們將盡快與您聯繫。');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
+
