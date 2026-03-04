@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聯絡我們 | SeednSeek</title>
+    <meta name="description" content="聯繫 SeednSeek，開始您的蛋白質設計優化專案。">
+    <link rel="icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="apple-touch-icon" href="logo/sns_short_logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="components/load-components.js" defer></script>
+    <script src="components/lang-switcher.js" defer></script>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="header-container">
+                <a class="logo-group" href="index.html" aria-label="SeednSeek 首頁">
+                    <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                </a>
+                <nav class="primary-nav" aria-label="主選單">
+                    <ul>
+                        <li><a href="index.html" data-nav="home"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html" data-nav="about"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="pricing.html" data-nav="pricing"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing</span></a></li>
+                        <li><a href="collab-methods.html" data-nav="collab"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html" data-nav="contact"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </nav>
+                <div class="lang-toggle" role="group" aria-label="Language">
+                    <button type="button" class="lang-toggle-btn" data-lang="zh" aria-pressed="true">中文</button>
+                    <button type="button" class="lang-toggle-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a>
+                <a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a>
+                <a href="pricing.html"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing</span></a>
+                <a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a>
+                <a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Contact Section -->
+            <section class="section">
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h2><span data-lang-zh>準備優化您的序列？</span><span data-lang-en>Ready to Optimize Your Sequence?</span></h2>
+                        <p style="margin-bottom: 2rem; color: var(--text-light);">
+                            <span data-lang-zh>告訴我們您的目標，我們將為您提供專業的計算蛋白質優化服務。提交您的原型序列與優化需求，我們的團隊將在 24-48 小時內與您聯繫。</span>
+                            <span data-lang-en>Share your goals and we will provide professional computational protein optimization. Submit your prototype sequence and optimization needs; our team will get back to you within 24–48 hours.</span>
+                        </p>
+                        <div class="contact-item">
+                            <h3><span data-lang-zh>業務聯絡</span><span data-lang-en>Business Contact</span></h3>
+                            <p><strong>Email:</strong> <a href="mailto:seednseek.ai@gmail.com">seednseek.ai@gmail.com</a></p>
+                        </div>
+                        <div style="margin-top: 2rem; padding: 2rem; background: var(--bg-light); border-radius: 12px;">
+                            <h3 style="color: var(--primary-green-dark); margin-bottom: 1rem;"><span data-lang-zh>資料安全保證</span><span data-lang-en>Data Security</span></h3>
+                            <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                                <span data-lang-zh>✓ 所有提交資料均經過企業級加密處理</span><span data-lang-en>✓ All submissions are encrypted at enterprise level</span>
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                                <span data-lang-zh>✓ 保密協議（NDA）可依需求提供</span><span data-lang-en>✓ NDA available upon request</span>
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">
+                                <span data-lang-zh>✓ 您的序列資料不會用於訓練公開模型</span><span data-lang-en>✓ Your sequence data is never used to train public models</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h2><span data-lang-zh>聯絡表單</span><span data-lang-en>Contact Form</span></h2>
+                        <p style="margin-bottom: 2rem; color: var(--text-light);">
+                            <span data-lang-zh>填寫基本資料與問題內容，我們將盡快回覆至您的信箱。</span>
+                            <span data-lang-en>Fill in your details and message; we will reply to your email shortly.</span>
+                        </p>
+                        <form id="contactForm" action="#" method="post">
+                            <input type="hidden" name="formType" value="contact">
+                            <div class="form-group">
+                                <label for="contactName"><span data-lang-zh>姓名／名稱 *</span><span data-lang-en>Name *</span></label>
+                                <input type="text" id="contactName" name="name" required data-placeholder-zh="請輸入您的姓名或稱呼" data-placeholder-en="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail"><span data-lang-zh>電子郵件 *</span><span data-lang-en>Email *</span></label>
+                                <input type="email" id="contactEmail" name="email" required data-placeholder-zh="請輸入電子郵件" data-placeholder-en="your.email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactOrg"><span data-lang-zh>單位／公司</span><span data-lang-en>Unit / Company</span></label>
+                                <input type="text" id="contactOrg" name="organization" data-placeholder-zh="選填" data-placeholder-en="Optional">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactTitle"><span data-lang-zh>職位</span><span data-lang-en>Job Title</span></label>
+                                <input type="text" id="contactTitle" name="jobTitle" data-placeholder-zh="選填" data-placeholder-en="Optional">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage"><span data-lang-zh>問題內容 *</span><span data-lang-en>Message *</span></label>
+                                <textarea id="contactMessage" name="message" required rows="4" data-placeholder-zh="請描述您的問題或需求" data-placeholder-en="Please describe your question or request" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 100px;"></textarea>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-light); border-radius: 8px; font-size: 0.9rem; color: var(--text-light);">
+                                <strong><span data-lang-zh>免責聲明：</span><span data-lang-en>Disclaimer:</span></strong>
+                                <span data-lang-zh>所有提交資料均經過加密處理。如需要，我們可以簽署保密協議（NDA）以確保最高級別的資料保護。</span>
+                                <span data-lang-en>All submissions are encrypted. We can sign an NDA for maximum data protection if needed.</span>
+                            </div>
+                            <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 1.5rem;"><span data-lang-zh>送出</span><span data-lang-en>Submit</span></button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Info Section -->
+            <section class="section" style="background: var(--bg-light);">
+                <div class="section-title">
+                    <h2><span data-lang-zh>常見問題</span><span data-lang-en>FAQ</span></h2>
+                </div>
+                <div class="features-grid" style="grid-template-columns: 1fr;">
+                    <div class="feature-card">
+                        <h3><span data-lang-zh>如何開始合作？</span><span data-lang-en>How do I get started?</span></h3>
+                        <p><span data-lang-zh>請透過聯絡表單或電子郵件與我們聯繫，提供您的蛋白質序列與功能需求。我們的團隊將進行初步評估，並在 2-3 個工作天內回覆您。</span><span data-lang-en>Contact us via the form or email with your sequence and requirements. We will assess and reply within 2–3 business days.</span></p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span data-lang-zh>專案時程需要多久？</span><span data-lang-en>How long does a project take?</span></h3>
+                        <p><span data-lang-zh>專案時程會根據複雜度而有所不同，一般來說，簡單的優化專案約需 2-4 週，複雜的設計專案可能需要 1-3 個月。我們會在專案開始前提供詳細的時程規劃。</span><span data-lang-en>Timeline depends on complexity: simple optimization typically 2–4 weeks, complex design 1–3 months. We provide a detailed schedule before starting.</span></p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span data-lang-zh>是否提供保密協議？</span><span data-lang-en>Do you offer NDAs?</span></h3>
+                        <p><span data-lang-zh>是的，我們非常重視客戶的資料保密。在專案開始前，我們可以簽署保密協議（NDA），確保您的序列資料與專案資訊的機密性。</span><span data-lang-en>Yes. We take confidentiality seriously and can sign an NDA before the project to protect your sequence and project information.</span></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo-group" aria-label="SeednSeek">
+                        <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                    </div>
+                    <h3>SeednSeek</h3>
+                    <p class="footer-tagline"><span data-lang-zh>蛋白質設計優化平台</span><span data-lang-en>Protein Design Optimization Platform</span></p>
+                </div>
+                <div class="footer-links-section">
+                    <h4><span data-lang-zh>快速連結</span><span data-lang-en>Quick Links</span></h4>
+                    <ul>
+                        <li><a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="pricing.html"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing</span></a></li>
+                        <li><a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4><span data-lang-zh>聯絡資訊</span><span data-lang-en>Contact</span></h4>
+                    <p><strong>Email:</strong> <a href="mailto:seednseek.ai@gmail.com">seednseek.ai@gmail.com</a></p>
+                    <p><strong>IG:</strong> <a href="https://www.instagram.com/seednseek.ai?igsh=MTFzczduY2ZvYWhwMA%3D%3D&utm_source=q" target="_blank" rel="noopener noreferrer">seednseek.ai</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/seednseek" target="_blank" rel="noopener noreferrer">SeednSeek</a></p>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/seednseekai" target="_blank" rel="noopener noreferrer">seednseekai</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 SeednSeek. All rights reserved.</span>
+                <div class="footer-legal">
+                    <a href="privacy.html"><span data-lang-zh>隱私政策</span><span data-lang-en>Privacy</span></a>
+                    <a href="terms.html"><span data-lang-zh>服務條款</span><span data-lang-en>Terms</span></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // 與 project-inquiry 使用同一個 GAS Web App URL（寄信至 seednseek.ai@gmail.com）
+        var GAS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzY3KhrW0t6SjiCUapxhYg1AZ5Njtxl40Muxl_0uWBE_cjNTDUFI2JkxhD2385cxobGDQ/exec';
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = document.getElementById('contactForm');
+            var currentZh = document.body.classList.contains('lang-zh');
+            if (!GAS_SCRIPT_URL || GAS_SCRIPT_URL.indexOf('YOUR_GAS') !== -1) {
+                alert(currentZh ? '請先設定 GAS Web App URL（與專案諮詢表單相同）。詳見 SETUP-GAS.md。' : 'Please set GAS_SCRIPT_URL (same as project inquiry). See SETUP-GAS.md.');
+                return;
+            }
+            var payload = { formType: 'contact', lang: currentZh ? 'zh' : 'en' };
+            var i, el;
+            for (i = 0; i < form.elements.length; i++) {
+                el = form.elements[i];
+                if (!el.name || el.name === 'formType') continue;
+                payload[el.name] = el.value;
+            }
+            var submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span data-lang-zh>送出中…</span><span data-lang-en>Sending…</span>'; }
+            // 使用 text/plain 避免 CORS 預檢（OPTIONS），GAS 仍會以 JSON 解析 body
+            fetch(GAS_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }).then(function(res) {
+                return res.json().then(function(data) { return { ok: res.ok, data: data }; }).catch(function() { return { ok: res.ok, data: {} }; });
+            }).then(function(result) {
+                var msgZh = document.body.classList.contains('lang-zh');
+                if (result.ok && result.data && result.data.success) {
+                    alert(msgZh ? '感謝您的訊息！我們已收到，將盡快回覆至您的信箱。' : 'Thank you! We have received your message and will reply to your email shortly.');
+                    form.reset();
+                } else {
+                    alert(msgZh ? '送出失敗，請稍後再試或直接來信 seednseek.ai@gmail.com。' : 'Submission failed. Please try again or email seednseek.ai@gmail.com.');
+                }
+            }).catch(function() {
+                var msgZh = document.body.classList.contains('lang-zh');
+                alert(msgZh ? '送出失敗，請檢查網路或直接來信 seednseek.ai@gmail.com。' : 'Submission failed. Please check your connection or email seednseek.ai@gmail.com.');
+            }).finally(function() {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span data-lang-zh>送出</span><span data-lang-en>Submit</span>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

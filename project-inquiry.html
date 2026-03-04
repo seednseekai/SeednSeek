@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專案諮詢 | Project Inquiry | SeednSeek</title>
+    <meta name="description" content="填寫專案諮詢表單，選擇入門／專業／企業方案後由專人與您聯繫。">
+    <link rel="icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo/sns_short_logo.png">
+    <link rel="apple-touch-icon" href="logo/sns_short_logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="components/load-components.js" defer></script>
+    <script src="components/lang-switcher.js" defer></script>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="header-container">
+                <a class="logo-group" href="index.html" aria-label="SeednSeek 首頁">
+                    <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                </a>
+                <nav class="primary-nav" aria-label="主選單">
+                    <ul>
+                        <li><a href="index.html" data-nav="home"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html" data-nav="about"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="pricing.html" data-nav="pricing"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing</span></a></li>
+                        <li><a href="collab-methods.html" data-nav="collab"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html" data-nav="contact"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </nav>
+                <div class="lang-toggle" role="group" aria-label="Language">
+                    <button type="button" class="lang-toggle-btn" data-lang="zh" aria-pressed="true">中文</button>
+                    <button type="button" class="lang-toggle-btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+                <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-nav">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <nav class="mobile-nav" id="mobile-nav">
+                <a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a>
+                <a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a>
+                <a href="pricing.html"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing</span></a>
+                <a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a>
+                <a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="section inquiry-section inquiry-page">
+                <div class="inquiry-section-inner">
+                    <div class="section-title">
+                        <h2><span data-lang-zh>專案諮詢表單</span><span data-lang-en>Project Inquiry Form</span></h2>
+                        <p class="pricing-section-desc">
+                            <span data-lang-zh>請填寫以下資訊，我們將依您選擇的方案由專人與您聯繫。</span>
+                            <span data-lang-en>Please fill in the details below. We will have an expert reach out based on your chosen plan.</span>
+                        </p>
+                    </div>
+                    <div id="planSummary" class="plan-summary" role="region" aria-label="Selected plan details"></div>
+                    <!-- 表單由 Google Apps Script 處理：自動回覆感謝信、通知 seednseek.ai@gmail.com、存檔至 Drive、寫入試算表。請在下方 script 中設定 GAS_SCRIPT_URL。-->
+                    <form id="projectInquiryForm" class="inquiry-form" action="#" method="POST">
+                        <input type="hidden" name="plan" id="inquiryPlan" value="">
+                        <input type="hidden" name="_subject" id="formSubject" value="">
+                        <input type="hidden" name="_replyto" id="formReplyTo" value="">
+                        <div class="form-group form-group--plan-label" id="planLabelWrap" style="display: none;">
+                            <label><span data-lang-zh>方案標記（將隨表單送出，供信件標記用）</span><span data-lang-en>Plan label (submitted with form for email tagging)</span></label>
+                            <input type="text" name="plan_label" id="planLabelInput" readonly class="input-readonly">
+                        </div>
+                        <!-- 共通：聯絡資訊 -->
+                        <div class="inquiry-form-grid">
+                            <div class="form-group">
+                                <label for="inquiryName"><span data-lang-zh>姓名 *</span><span data-lang-en>Name *</span></label>
+                                <input type="text" id="inquiryName" name="name" required data-placeholder-zh="請輸入您的姓名或稱呼" data-placeholder-en="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryEmail"><span data-lang-zh>電子郵件 *</span><span data-lang-en>Email *</span></label>
+                                <input type="email" id="inquiryEmail" name="email" required data-placeholder-zh="your@email.com" data-placeholder-en="your@email.com">
+                            </div>
+                        </div>
+                        <div class="inquiry-form-grid">
+                            <div class="form-group">
+                                <label for="inquiryOrg"><span data-lang-zh>單位／公司</span><span data-lang-en>Unit / Company</span></label>
+                                <input type="text" id="inquiryOrg" name="organization" data-placeholder-zh="選填" data-placeholder-en="Optional">
+                            </div>
+                            <div class="form-group">
+                                <label for="inquiryTitle"><span data-lang-zh>職稱</span><span data-lang-en>Job Title</span></label>
+                                <input type="text" id="inquiryTitle" name="jobTitle" data-placeholder-zh="選填" data-placeholder-en="Optional">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inquiryPhone"><span data-lang-zh>電話號碼</span><span data-lang-en>Phone</span></label>
+                            <input type="tel" id="inquiryPhone" name="phone" data-placeholder-zh="請輸入電話（選填）" data-placeholder-en="Phone (optional)">
+                        </div>
+                        <!-- Professional / Enterprise 才顯示：專案類型 -->
+                        <div class="inquiry-plan-group inquiry-show-professional inquiry-show-enterprise">
+                            <div class="form-group">
+                                <label for="projectType"><span data-lang-zh>專案類型 *</span><span data-lang-en>Project Type *</span></label>
+                                <select id="projectType" name="projectType">
+                                    <option value="" data-lang-zh="請選擇專案類型" data-lang-en="Select project type"></option>
+                                    <option value="enzyme-stability" data-lang-zh="酵素穩定性優化" data-lang-en="Enzyme stability optimization"></option>
+                                    <option value="antibody-affinity" data-lang-zh="抗體親和力優化" data-lang-en="Antibody affinity optimization"></option>
+                                    <option value="de-novo-design" data-lang-zh="從頭設計" data-lang-en="De novo design"></option>
+                                    <option value="thermostability" data-lang-zh="熱穩定性提升" data-lang-en="Thermostability improvement"></option>
+                                    <option value="solubility" data-lang-zh="溶解度改善" data-lang-en="Solubility improvement"></option>
+                                    <option value="specificity" data-lang-zh="結合特異性優化" data-lang-en="Binding specificity optimization"></option>
+                                    <option value="other" data-lang-zh="其他" data-lang-en="Other"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 共通：專案內容 -->
+                        <div class="form-group">
+                            <label for="projectGoal"><span data-lang-zh>專案目標 *</span><span data-lang-en>Project Goal *</span></label>
+                            <input type="text" id="projectGoal" name="projectGoal" required data-placeholder-zh="例如：酵素活性、蛋白質穩定性、抗體親和力" data-placeholder-en="e.g. Enzyme activity, Protein stability, Antibody affinity">
+                        </div>
+                        <div class="form-group">
+                            <label for="optimizationTarget"><span data-lang-zh>優化目標 *</span><span data-lang-en>Optimization Target *</span></label>
+                            <select id="optimizationTarget" name="optimizationTarget" required>
+                                <option value="" data-lang-zh="請選擇" data-lang-en="Select"></option>
+                                <option value="stability" data-lang-zh="穩定性" data-lang-en="Stability"></option>
+                                <option value="activity" data-lang-zh="活性" data-lang-en="Activity"></option>
+                                <option value="expression" data-lang-zh="表達量" data-lang-en="Expression"></option>
+                                <option value="pkpd" data-lang-zh="藥動學（PK/PD）" data-lang-en="PK/PD"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="proteinName"><span data-lang-zh>目標蛋白質名稱 *</span><span data-lang-en>Target protein name *</span></label>
+                            <input type="text" id="proteinName" name="proteinName" required data-placeholder-zh="例如：葡萄糖氧化酶、抗體 Fab 片段等" data-placeholder-en="e.g. Glucose oxidase, antibody Fab fragment">
+                        </div>
+                        <div class="form-group">
+                            <label for="targetSequence"><span data-lang-zh>目標序列／參考序列 *</span><span data-lang-en>Target sequence / Reference (Prototype) *</span></label>
+                            <span class="form-hint form-hint--block"><span data-lang-zh>FASTA 格式，如有來源文獻請註明</span><span data-lang-en>FASTA format; cite source if applicable</span></span>
+                            <textarea id="targetSequence" name="targetSequence" required rows="3" data-placeholder-zh=">序列名稱&#10;MKTAYIAKQR..." data-placeholder-en=">Sequence name&#10;MKTAYIAKQR..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="knownKnowledge"><span data-lang-zh>已知結構與功能限制</span><span data-lang-en>Known structure & function constraints</span></label>
+                            <textarea id="knownKnowledge" name="knownKnowledge" rows="2" data-placeholder-zh="例如：第 45-52 位為活性位點不可變更；C 端 His-tag 需保留等" data-placeholder-en="e.g. Residues 45-52 are active site, immutable; retain C-terminal His-tag"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="targetFunction"><span data-lang-zh>優化目標與功能需求 *</span><span data-lang-en>Optimization goals & functional requirements *</span></label>
+                            <textarea id="targetFunction" name="targetFunction" required rows="2" data-placeholder-zh="例如：提升熱穩定性至 70°C 以上；改善 pH 4-6 範圍內的活性等" data-placeholder-en="e.g. Improve thermostability to &gt;70°C; activity in pH 4-6"></textarea>
+                        </div>
+                        <!-- 所需序列數量：Starter 固定 1，Professional 2–20，Enterprise 依專案 -->
+                        <div class="inquiry-form-grid inquiry-form-grid--three">
+                            <div class="form-group">
+                                <label for="sequenceCount"><span data-lang-zh>所需序列數量 *</span><span data-lang-en>Required Sequence Count *</span></label>
+                                <input type="number" id="sequenceCount" name="sequenceCount" min="1" required data-placeholder-zh="請輸入數量" data-placeholder-en="Enter count">
+                                <span class="form-hint" id="sequenceCountHint"><span data-lang-zh>入門方案可下訂多個序列</span><span data-lang-en>Starter plan: one or more sequences</span></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostOrganism"><span data-lang-zh>宿主生物 *</span><span data-lang-en>Host Organism *</span></label>
+                                <input type="text" id="hostOrganism" name="hostOrganism" required data-placeholder-zh="例如 E. coli、酵母、哺乳動物細胞" data-placeholder-en="e.g. E. coli, Yeast, Mammalian cells">
+                            </div>
+                            <div class="form-group">
+                                <label for="expectedTimeline"><span data-lang-zh>預期研發時程</span><span data-lang-en>Expected Timeline</span></label>
+                                <input type="text" id="expectedTimeline" name="expectedTimeline" data-placeholder-zh="例如：3 個月內完成初步驗證" data-placeholder-en="e.g. Initial validation in 3 months">
+                            </div>
+                        </div>
+                        <!-- Professional / Enterprise：驗證數據與方法 -->
+                        <div class="inquiry-plan-group inquiry-show-professional inquiry-show-enterprise">
+                            <div class="form-group">
+                                <label for="validationData"><span data-lang-zh>現有驗證實驗數據</span><span data-lang-en>Existing validation data</span></label>
+                                <textarea id="validationData" name="validationData" rows="2" data-placeholder-zh="例如：活性為 X U/mg；50°C 下 30 分鐘後活性保留率 60%；IC50 值為 Y μM 等" data-placeholder-en="e.g. Activity X U/mg; 60% activity after 30 min at 50°C; IC50 Y μM"></textarea>
+                                <div class="file-input-wrap">
+                                    <input type="file" id="validationDataFile" name="validationDataFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" class="file-input-native" multiple>
+                                    <label for="validationDataFile" class="file-input-btn"><span data-lang-zh>選擇檔案</span><span data-lang-en>Choose File</span></label>
+                                    <span class="file-input-filename"><span class="file-input-filename-name"></span><span class="file-input-filename-empty"><span data-lang-zh>未選擇任何檔案</span><span data-lang-en>No file chosen</span></span></span>
+                                </div>
+                                <div class="file-list" id="fileList-validationDataFile" aria-live="polite"></div>
+                                <span class="form-hint"><span data-lang-zh>支援格式：PDF, Word, Excel, CSV, TXT；可多次選擇以增加檔案，加錯可移除</span><span data-lang-en>PDF, Word, Excel, CSV, TXT; select again to add more, click to remove</span></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationProtocol"><span data-lang-zh>驗證實驗方法</span><span data-lang-en>Validation protocol</span></label>
+                                <textarea id="validationProtocol" name="validationProtocol" rows="2" data-placeholder-zh="例如：CD 檢測二級結構；熱變性實驗；ELISA 或 SPR 測定結合親和力等" data-placeholder-en="e.g. CD for secondary structure; thermal denaturation; ELISA or SPR"></textarea>
+                                <div class="file-input-wrap">
+                                    <input type="file" id="validationProtocolFile" name="validationProtocolFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" class="file-input-native" multiple>
+                                    <label for="validationProtocolFile" class="file-input-btn"><span data-lang-zh>選擇檔案</span><span data-lang-en>Choose File</span></label>
+                                    <span class="file-input-filename"><span class="file-input-filename-name"></span><span class="file-input-filename-empty"><span data-lang-zh>未選擇任何檔案</span><span data-lang-en>No file chosen</span></span></span>
+                                </div>
+                                <div class="file-list" id="fileList-validationProtocolFile" aria-live="polite"></div>
+                                <span class="form-hint"><span data-lang-zh>支援格式：PDF, Word, Excel, TXT；可多次選擇以增加檔案，加錯可移除</span><span data-lang-en>PDF, Word, Excel, TXT; select again to add more, click to remove</span></span>
+                            </div>
+                        </div>
+                        <!-- Enterprise 才顯示：戰略合作需求 -->
+                        <div class="inquiry-plan-group inquiry-show-enterprise">
+                            <div class="form-group">
+                                <label for="partnershipGoals"><span data-lang-zh>戰略合作需求 / 預期里程碑</span><span data-lang-en>Partnership goals / Expected milestones</span></label>
+                                <textarea id="partnershipGoals" name="partnershipGoals" rows="2" data-placeholder-zh="例如：希望達成的研發里程碑、IP 或權利金期待、時程規劃等" data-placeholder-en="e.g. R&D milestones, IP or royalty expectations, timeline"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="uploadData"><span data-lang-zh>上傳既有資料（PDF／CSV）</span><span data-lang-en>Upload Previous Data (PDF / CSV)</span></label>
+                            <div class="file-input-wrap">
+                                <input type="file" id="uploadData" name="uploadData" accept=".pdf,.csv" class="file-input-native" multiple>
+                                <label for="uploadData" class="file-input-btn"><span data-lang-zh>選擇檔案</span><span data-lang-en>Choose File</span></label>
+                                <span class="file-input-filename"><span class="file-input-filename-name"></span><span class="file-input-filename-empty"><span data-lang-zh>未選擇任何檔案</span><span data-lang-en>No file chosen</span></span></span>
+                            </div>
+                            <div class="file-list" id="fileList-uploadData" aria-live="polite"></div>
+                            <span class="form-hint"><span data-lang-zh>可上傳既有序列、實驗數據或報告；可多次選擇以增加檔案，加錯可移除。</span><span data-lang-en>Upload sequences, data or reports; select again to add more, click to remove.</span></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="otherNotes"><span data-lang-zh>其他備註或特殊需求</span><span data-lang-en>Other notes or special requirements</span></label>
+                            <textarea id="otherNotes" name="otherNotes" rows="2" data-placeholder-zh="任何其他需要補充的資訊或特殊考量" data-placeholder-en="Any other information or special requirements"></textarea>
+                        </div>
+                        <div class="inquiry-disclaimer">
+                            <strong><span data-lang-zh>免責聲明：</span><span data-lang-en>Disclaimer:</span></strong>
+                            <span data-lang-zh>所有提交資料均經過加密處理。如需要，我們可以簽署保密協議（NDA）以確保最高級別的資料保護。</span>
+                            <span data-lang-en>All submissions are encrypted. We can sign an NDA for maximum data protection if needed.</span>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--inquiry-submit">
+                            <span data-lang-zh>提交專案諮詢</span>
+                            <span data-lang-en>Submit Inquiry</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo-group" aria-label="SeednSeek">
+                        <img src="logo/sns_short_logo.png" alt="SeednSeek Logo" class="logo-image">
+                    </div>
+                    <h3>SeednSeek</h3>
+                    <p class="footer-tagline"><span data-lang-zh>蛋白質設計優化平台</span><span data-lang-en>Protein Design Optimization Platform</span></p>
+                </div>
+                <div class="footer-links-section">
+                    <h4><span data-lang-zh>快速連結</span><span data-lang-en>Quick Links</span></h4>
+                    <ul>
+                        <li><a href="index.html"><span data-lang-zh>首頁</span><span data-lang-en>Home</span></a></li>
+                        <li><a href="about.html"><span data-lang-zh>關於我們</span><span data-lang-en>About</span></a></li>
+                        <li><a href="pricing.html"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing</span></a></li>
+                        <li><a href="collab-methods.html"><span data-lang-zh>合作方式</span><span data-lang-en>Collaboration</span></a></li>
+                        <li><a href="contact.html"><span data-lang-zh>聯絡我們</span><span data-lang-en>Contact</span></a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4><span data-lang-zh>聯絡資訊</span><span data-lang-en>Contact</span></h4>
+                    <p><strong>Email:</strong> <a href="mailto:seednseek.ai@gmail.com">seednseek.ai@gmail.com</a></p>
+                    <p><strong>IG:</strong> <a href="https://www.instagram.com/seednseek.ai?igsh=MTFzczduY2ZvYWhwMA%3D%3D&utm_source=q" target="_blank" rel="noopener noreferrer">seednseek.ai</a></p>
+                    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/seednseek" target="_blank" rel="noopener noreferrer">SeednSeek</a></p>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/seednseekai" target="_blank" rel="noopener noreferrer">seednseekai</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 SeednSeek. All rights reserved.</span>
+                <div class="footer-legal">
+                    <a href="privacy.html"><span data-lang-zh>隱私政策</span><span data-lang-en>Privacy</span></a>
+                    <a href="terms.html"><span data-lang-zh>服務條款</span><span data-lang-en>Terms</span></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        (function() {
+            var planData = {
+                starter: {
+                    nameZh: '入門方案', nameEn: 'Starter',
+                    nameLabelZh: '入門方案', nameLabelEn: 'Starter',
+                    modeZh: '序列授權（單一序列優化）· 蛋白質優化服務',
+                    modeEn: 'Sequence Authorization (single sequence) · Protein optimization service',
+                    feeZh: '服務費', feeEn: 'Service fee',
+                    priceZh: 'NT$15,000 / 序列', priceEn: 'NT$15,000 / sequence',
+                    timelineZh: '5–7 工作天', timelineEn: '5–7 business days',
+                    focusZh: '', focusEn: ''
+                },
+                professional: {
+                    nameZh: '專業方案', nameEn: 'Professional',
+                    nameLabelZh: '專業方案', nameLabelEn: 'Professional',
+                    modeZh: '第一階段 1000 組 · 批次優化 · 蛋白質優化服務',
+                    modeEn: 'Phase 1: 1000 sets · Batch optimization · Protein optimization service',
+                    feeZh: '服務費', feeEn: 'Service fee',
+                    priceZh: 'NT$100,000 起 / 第一階段', priceEn: 'NT$100,000 from / Phase 1',
+                    timelineZh: '第一階段約 6 週（+10~20% 功能優化）', timelineEn: 'Phase 1: ~6 weeks (+10~20%)',
+                    focusZh: '本方案：第一階段 · 服務費 · 無授權費', focusEn: 'This plan: Phase 1 · Service fee · No authorization fee'
+                },
+                enterprise: {
+                    nameZh: '企業方案', nameEn: 'Enterprise',
+                    nameLabelZh: '企業方案', nameLabelEn: 'Enterprise',
+                    modeZh: '第二階段 2000 組 · 戰略夥伴 · 授權／專利費與權利金',
+                    modeEn: 'Phase 2: 2000 sets · Strategic partnership · Authorization / patent fee & royalties',
+                    feeZh: '服務費 + 授權／專利費、權利金', feeEn: 'Service fee + Authorization / patent fee & royalties',
+                    priceZh: 'NT$200,000 起 / 第二階段', priceEn: 'NT$200,000 from / Phase 2',
+                    timelineZh: '6 週客戶實驗 + 5 週開發（+40~50% 優化）', timelineEn: '6 wk + 5 wk (+40~50% optimization)',
+                    focusZh: '本方案：第二階段 · 服務費+授權／專利費與權利金', focusEn: 'This plan: Phase 2 · Service + authorization / patent fee & royalties'
+                }
+            };
+            var params = new URLSearchParams(window.location.search);
+            var plan = (params.get('plan') || '').toLowerCase();
+            if (!planData[plan]) plan = '';
+            var summaryEl = document.getElementById('planSummary');
+            var inputEl = document.getElementById('inquiryPlan');
+            var isZh = document.documentElement.lang === 'zh-Hant';
+            function getCurrentZh() {
+                try {
+                    if (document.body && document.body.classList.contains('lang-en')) return false;
+                    if (document.body && document.body.classList.contains('lang-zh')) return true;
+                } catch (e) {}
+                try {
+                    var s = localStorage.getItem('seednseek-lang');
+                    if (s === 'en') return false;
+                    if (s === 'zh') return true;
+                } catch (e) {}
+                return document.documentElement.lang === 'zh-Hant';
+            }
+            if (plan && planData[plan]) {
+                inputEl.value = plan;
+                var d = planData[plan];
+                var focusHtml = (d.focusZh || d.focusEn) ? '<p class="plan-summary-focus"><span data-lang-zh>' + (d.focusZh || '') + '</span><span data-lang-en>' + (d.focusEn || '') + '</span></p>' : '';
+                summaryEl.innerHTML = '<h3 class="plan-summary-title"><span data-lang-zh>您選擇的方案：' + d.nameZh + '</span><span data-lang-en>Selected plan: ' + d.nameEn + '</span></h3>' +
+                    focusHtml +
+                    '<dl class="plan-summary-dl">' +
+                    '<dt><span data-lang-zh>方案模式</span><span data-lang-en>Plan mode</span></dt><dd><span data-lang-zh>' + d.modeZh + '</span><span data-lang-en>' + d.modeEn + '</span></dd>' +
+                    '<dt><span data-lang-zh>費用性質</span><span data-lang-en>Fee type</span></dt><dd><span data-lang-zh>' + d.feeZh + '</span><span data-lang-en>' + d.feeEn + '</span></dd>' +
+                    '<dt><span data-lang-zh>價格</span><span data-lang-en>Pricing</span></dt><dd><span data-lang-zh>' + d.priceZh + '</span><span data-lang-en>' + d.priceEn + '</span></dd>' +
+                    '<dt><span data-lang-zh>時程</span><span data-lang-en>Timeline</span></dt><dd><span data-lang-zh>' + d.timelineZh + '</span><span data-lang-en>' + d.timelineEn + '</span></dd>' +
+                    '</dl>';
+                summaryEl.classList.add('plan-summary--set');
+                var planLabelWrap = document.getElementById('planLabelWrap');
+                var planLabelInput = document.getElementById('planLabelInput');
+                var currentZh = getCurrentZh();
+                if (planLabelWrap && planLabelInput) {
+                    planLabelInput.value = currentZh ? d.nameLabelZh : d.nameLabelEn;
+                    planLabelWrap.style.display = 'block';
+                }
+                var formSubjectEl = document.getElementById('formSubject');
+                if (formSubjectEl) formSubjectEl.value = '【' + (currentZh ? d.nameLabelZh : d.nameLabelEn) + '】' + (currentZh ? '專案諮詢 - SeednSeek' : 'Project Inquiry - SeednSeek');
+                var seqInput = document.getElementById('sequenceCount');
+                var seqHint = document.getElementById('sequenceCountHint');
+                var projectTypeSelect = document.getElementById('projectType');
+                document.querySelectorAll('.inquiry-plan-group').forEach(function(el) {
+                    el.classList.remove('inquiry-plan-visible');
+                    var show = (plan === 'professional' && el.classList.contains('inquiry-show-professional')) ||
+                        (plan === 'enterprise' && (el.classList.contains('inquiry-show-professional') || el.classList.contains('inquiry-show-enterprise')));
+                    if (show) el.classList.add('inquiry-plan-visible');
+                });
+                if (seqInput) {
+                    if (plan === 'starter') {
+                        seqInput.min = 1; seqInput.removeAttribute('max'); seqInput.value = ''; seqInput.readOnly = false;
+                        if (seqHint) seqHint.innerHTML = '<span data-lang-zh>入門方案可下訂多個序列</span><span data-lang-en>Starter plan: one or more sequences</span>';
+                    } else if (plan === 'professional') {
+                        seqInput.min = 1; seqInput.removeAttribute('max'); seqInput.value = 1000; seqInput.readOnly = false;
+                        if (seqHint) seqHint.innerHTML = '<span data-lang-zh>依專案（第一階段 1000 組；第二階段 2000 組 → 交付最優解）</span><span data-lang-en>By project (Phase 1: 1000 sets; Phase 2: 2000 sets → deliver best)</span>';
+                    } else {
+                        seqInput.min = 1; seqInput.removeAttribute('max'); seqInput.value = ''; seqInput.readOnly = false;
+                        if (seqHint) seqHint.innerHTML = '<span data-lang-zh>依專案需求填寫</span><span data-lang-en>As per project needs</span>';
+                    }
+                }
+                if (projectTypeSelect) {
+                    projectTypeSelect.required = (plan === 'professional' || plan === 'enterprise');
+                }
+                document.addEventListener('seednseek-lang-change', function(e) {
+                    var newZh = e.detail && e.detail.lang !== 'en';
+                    if (plan && planData[plan]) {
+                        var d = planData[plan];
+                        if (planLabelInput) planLabelInput.value = newZh ? d.nameLabelZh : d.nameLabelEn;
+                        if (formSubjectEl) formSubjectEl.value = '【' + (newZh ? d.nameLabelZh : d.nameLabelEn) + '】' + (newZh ? '專案諮詢 - SeednSeek' : 'Project Inquiry - SeednSeek');
+                    }
+                });
+            } else {
+                summaryEl.innerHTML = '<p class="plan-summary-empty"><span data-lang-zh>請先至</span><span data-lang-en>Please go to </span><a href="pricing.html"><span data-lang-zh>定價與服務</span><span data-lang-en>Pricing &amp; Services</span></a><span data-lang-zh>頁面選擇方案。</span><span data-lang-en> to select a plan.</span></p>';
+            }
+            // Google Apps Script Web App URL（部署 GAS 後請替換為您的網址）
+            var GAS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrJwnk3t4IjEwzN_BDqFknYKk0Rrr5mPvy4rdILbE5tmqKh08dsyGmXjP1ROCRfgOP/exec';
+            var MAX_FILE_SIZE_MB = 8;
+            var MAX_TOTAL_FILES_MB = 20;
+            var fileFieldNames = ['validationDataFile', 'validationProtocolFile', 'uploadData'];
+            var fileListsState = { validationDataFile: [], validationProtocolFile: [], uploadData: [] };
+            function renderFileList(key) {
+                var listEl = document.getElementById('fileList-' + key);
+                var arr = fileListsState[key] || [];
+                if (!listEl) return;
+                if (arr.length === 0) {
+                    listEl.innerHTML = '';
+                    return;
+                }
+                var zh = document.body.classList.contains('lang-zh');
+                var html = '';
+                for (var i = 0; i < arr.length; i++) {
+                    html += '<div class="file-list-item"><span class="file-list-name">' + escapeHtml(arr[i].name) + '</span> <button type="button" class="file-list-remove" data-key="' + escapeHtml(key) + '" data-index="' + i + '" aria-label="' + (zh ? '移除' : 'Remove') + '">' + (zh ? '移除' : 'Remove') + '</button></div>';
+                }
+                listEl.innerHTML = html;
+                listEl.querySelectorAll('.file-list-remove').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var k = btn.getAttribute('data-key');
+                        var idx = parseInt(btn.getAttribute('data-index'), 10);
+                        if (fileListsState[k]) {
+                            fileListsState[k].splice(idx, 1);
+                            renderFileList(k);
+                            syncFileInputDisplay(k);
+                        }
+                    });
+                });
+            }
+            function escapeHtml(s) {
+                var div = document.createElement('div');
+                div.textContent = s;
+                return div.innerHTML;
+            }
+            function syncFileInputDisplay(key) {
+                var input = document.querySelector('[name="' + key + '"]');
+                var wrap = input && input.closest('.file-input-wrap');
+                if (!wrap) return;
+                var nameEl = wrap.querySelector('.file-input-filename-name');
+                if (!nameEl) return;
+                var arr = fileListsState[key] || [];
+                if (arr.length) {
+                    nameEl.textContent = arr.length > 1 ? (document.body.classList.contains('lang-zh') ? arr.length + ' 個檔案' : arr.length + ' file(s)') : arr[0].name;
+                    nameEl.classList.add('is-set');
+                } else {
+                    nameEl.textContent = '';
+                    nameEl.classList.remove('is-set');
+                }
+            }
+            function fileToBase64(file, onProgress) {
+                return new Promise(function(resolve, reject) {
+                    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                        reject(new Error('FILE_TOO_BIG'));
+                        return;
+                    }
+                    if (onProgress) onProgress(file.name);
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        var dataUrl = reader.result;
+                        var base64 = dataUrl.indexOf(',') >= 0 ? dataUrl.split(',')[1] : dataUrl;
+                        resolve({ filename: file.name, base64: base64 });
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
+            document.getElementById('projectInquiryForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                var form = document.getElementById('projectInquiryForm');
+                var formSubjectEl = document.getElementById('formSubject');
+                if (formSubjectEl && plan && planData[plan]) {
+                    var d = planData[plan];
+                    formSubjectEl.value = '【' + (isZh ? d.nameLabelZh : d.nameLabelEn) + '】' + (isZh ? '專案諮詢 - SeednSeek' : 'Project Inquiry - SeednSeek');
+                }
+                var replyToEl = document.getElementById('formReplyTo');
+                var emailEl = document.getElementById('inquiryEmail');
+                if (replyToEl && emailEl) replyToEl.value = emailEl.value || '';
+                var currentZh = document.body.classList.contains('lang-zh');
+                if (!GAS_SCRIPT_URL || GAS_SCRIPT_URL.indexOf('YOUR_GAS') !== -1) {
+                    alert(currentZh ? '請先設定 Google Apps Script：將 GAS_SCRIPT_URL 換成您的 Web App 網址。詳見 SETUP-GAS.md。' : 'Please set GAS_SCRIPT_URL to your Web App URL. See SETUP-GAS.md.');
+                    return;
+                }
+                // 明確列出所有欄位名稱，確保點選（select）與隱藏欄位都會送出並寫入 Sheet
+                var scalarFields = ['plan', '_subject', '_replyto', 'plan_label', 'name', 'email', 'organization', 'jobTitle', 'phone', 'projectType', 'projectGoal', 'optimizationTarget', 'proteinName', 'targetSequence', 'knownKnowledge', 'targetFunction', 'sequenceCount', 'hostOrganism', 'expectedTimeline', 'validationData', 'validationProtocol', 'partnershipGoals', 'otherNotes'];
+                var payload = {};
+                // 依目前網頁語言送出 lang，供 GAS 回信對應語言（中文版→中文回信，英文版→英文回信）
+                payload.lang = document.body.classList.contains('lang-en') ? 'en' : 'zh';
+                var fileKeys = [];
+                var i, name, fieldEl;
+                for (i = 0; i < scalarFields.length; i++) {
+                    name = scalarFields[i];
+                    fieldEl = form.querySelector('[name="' + name + '"]');
+                    if (fieldEl) payload[name] = fieldEl.value || '';
+                }
+                var fileList = [];
+                for (i = 0; i < fileFieldNames.length; i++) {
+                    name = fileFieldNames[i];
+                    var arr = fileListsState[name] || [];
+                    for (var j = 0; j < arr.length; j++) {
+                        fileList.push({ key: name, file: arr[j] });
+                    }
+                }
+                var submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span data-lang-zh>送出中…</span><span data-lang-en>Sending…</span>'; }
+                var totalSize = 0;
+                for (var fi = 0; fi < fileList.length; fi++) totalSize += fileList[fi].file.size;
+                if (fileList.length && totalSize > MAX_TOTAL_FILES_MB * 1024 * 1024) {
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<span data-lang-zh>提交專案諮詢</span><span data-lang-en>Submit Inquiry</span>'; }
+                    alert(currentZh ? '所有檔案總大小不得超過 ' + MAX_TOTAL_FILES_MB + ' MB，請縮小檔案或減少數量。' : 'Total file size must not exceed ' + MAX_TOTAL_FILES_MB + ' MB.');
+                    return;
+                }
+                var msgZh = function() { return document.body.classList.contains('lang-zh'); };
+                var updateSubmitText = function(strZh, strEn) {
+                    if (submitBtn) submitBtn.innerHTML = '<span data-lang-zh>' + strZh + '</span><span data-lang-en>' + strEn + '</span>';
+                };
+                var timeoutMs = 60000;
+                var controller = new AbortController();
+                var timeoutId = setTimeout(function() { controller.abort(); }, timeoutMs);
+                var filePromises = fileList.map(function(item, idx) {
+                    return fileToBase64(item.file, function(filename) {
+                        updateSubmitText('正在準備檔案 ' + (idx + 1) + '/' + fileList.length + '…', 'Preparing file ' + (idx + 1) + '/' + fileList.length + '…');
+                    }).then(function(obj) { return { key: item.key, obj: obj }; });
+                });
+                if (fileList.length) updateSubmitText('正在準備檔案 1/' + fileList.length + '…', 'Preparing file 1/' + fileList.length + '…');
+                Promise.all(filePromises).then(function(results) {
+                    var k, r;
+                    for (var ri = 0; ri < results.length; ri++) {
+                        r = results[ri];
+                        k = r.key;
+                        if (!payload[k]) payload[k] = [];
+                        payload[k].push(r.obj);
+                    }
+                    // 一律送陣列（1 個或多個檔案），GAS 依序存檔並加標籤命名
+                    updateSubmitText('正在送出…', 'Sending…');
+                    return fetch(GAS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
+                    });
+                }).then(function(res) {
+                    clearTimeout(timeoutId);
+                    var msgZh = document.body.classList.contains('lang-zh');
+                    alert(msgZh ? '感謝您的諮詢！我們已收到，將盡快回覆。系統已寄出一封確認信至您的信箱。' : 'Thank you! We have received your inquiry and will reply soon. A confirmation email has been sent to your inbox.');
+                    form.reset();
+                    if (inputEl) inputEl.value = plan || '';
+                    var planLabelInput = document.getElementById('planLabelInput');
+                    if (plan && planData[plan] && planLabelInput) planLabelInput.value = msgZh ? planData[plan].nameLabelZh : planData[plan].nameLabelEn;
+                    var seqInput = document.getElementById('sequenceCount');
+                    if (plan === 'starter' && seqInput) { seqInput.min = 1; seqInput.removeAttribute('max'); seqInput.readOnly = false; }
+                    fileFieldNames.forEach(function(k) { fileListsState[k] = []; renderFileList(k); syncFileInputDisplay(k); });
+                    document.querySelectorAll('.file-input-native').forEach(updateFileInputDisplay);
+                }).catch(function(err) {
+                    clearTimeout(timeoutId);
+                    var msgZh = document.body.classList.contains('lang-zh');
+                    if (err && err.name === 'AbortError') {
+                        alert(msgZh ? '連線逾時，請檢查網路後再試。' : 'Connection timed out.');
+                    } else if (err && err.message === 'FILE_TOO_BIG') {
+                        alert(msgZh ? '單一檔案不得超過 ' + MAX_FILE_SIZE_MB + ' MB，請縮小後再上傳。' : 'Each file must be under ' + MAX_FILE_SIZE_MB + ' MB.');
+                    } else {
+                        console.error('Fetch error:', err);
+                    }
+                }).finally(function() {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span data-lang-zh>提交專案諮詢</span><span data-lang-en>Submit Inquiry</span>';
+                    }
+                });
+            });
+            // 自訂檔案上傳：顯示檔名或「未選擇任何檔案」（依語言切換）
+            function updateFileInputDisplay(input) {
+                var wrap = input && input.closest('.file-input-wrap');
+                if (!wrap) return;
+                var nameEl = wrap.querySelector('.file-input-filename-name');
+                if (!nameEl) return;
+                var files = input.files;
+                if (files && files.length) {
+                    nameEl.textContent = files.length > 1
+                        ? (document.body.classList.contains('lang-zh') ? files.length + ' 個檔案' : files.length + ' file(s)')
+                        : files[0].name;
+                    nameEl.classList.add('is-set');
+                } else {
+                    nameEl.textContent = '';
+                    nameEl.classList.remove('is-set');
+                }
+            }
+            fileFieldNames.forEach(function(key) {
+                var input = document.querySelector('[name="' + key + '"]');
+                if (!input) return;
+                input.addEventListener('change', function() {
+                    var files = input.files;
+                    if (files && files.length) {
+                        for (var i = 0; i < files.length; i++) {
+                            fileListsState[key].push(files[i]);
+                        }
+                        input.value = '';
+                        renderFileList(key);
+                        syncFileInputDisplay(key);
+                    }
+                });
+            });
+            document.getElementById('projectInquiryForm').addEventListener('reset', function() {
+                fileFieldNames.forEach(function(k) { fileListsState[k] = []; renderFileList(k); syncFileInputDisplay(k); });
+                document.querySelectorAll('.file-input-native').forEach(updateFileInputDisplay);
+            });
+        })();
+    </script>
+</body>
+</html>
