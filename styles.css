@@ -84,11 +84,14 @@ a:hover {
 .site-header {
     position: sticky;
     top: 0;
+    width: 100%;
+    min-width: 100%;
     background: var(--bg-white);
     box-shadow: var(--shadow-sm);
     z-index: 1000;
     padding: 1rem 0;
     transition: var(--transition);
+    flex-shrink: 0; /* 避免在 .page-shell flex 版面中被壓縮，與其他頁面一致 */
 }
 
 /* Homepage fixed header (always fixed, not sticky) */
@@ -1332,7 +1335,7 @@ main {
 }
 
 /* ============================================
-   Pricing & Services Page
+   Pricing & Services Page (class 僅在 main，不影響 header)
    ============================================ */
 .pricing-page {
     background: var(--bg-white);
@@ -2350,4 +2353,13 @@ main {
     .protein-label-item p {
         font-size: 0.85rem;
     }
+}
+
+/* 確保所有頁面 Header 容器一致，避免選單欄與其他頁面不一致 */
+.site-header .header-container {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    padding: 0 2rem !important;
 }
